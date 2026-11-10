@@ -3,15 +3,13 @@ using Adopta.Api.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MySql.EntityFrameworkCore.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 var cfg = builder.Configuration;
 
-// Base de datos
+// Base de datos (MySQL, proveedor de Oracle)
 var cs = cfg.GetConnectionString("Default")!;
-builder.Services.AddDbContext<AdoptaDbContext>(o =>
-    o.UseMySQL(cs, ServerVersion.AutoDetect(cs)));
+builder.Services.AddDbContext<AdoptaDbContext>(o => o.UseMySQL(cs));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -48,11 +46,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-internal class ServerVersion
-{
-    internal static Action<MySQLDbContextOptionsBuilder>? AutoDetect(string cs)
-    {
-        throw new NotImplementedException();
-    }
-}
