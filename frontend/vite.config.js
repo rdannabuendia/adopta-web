@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-const API = 'http://localhost:5000' 
+const API = 'http://localhost:5000'
 
 export default defineConfig({
   plugins: [
@@ -23,14 +23,16 @@ export default defineConfig({
         ]
       },
       workbox: {
-        runtimeCaching: [{
-          urlPattern: ({ url }) => url.pathname.startsWith('/api'),
-          handler: 'NetworkFirst',
-          options: { cacheName: 'api-cache' }
-        }]
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/api'),
+            handler: 'NetworkFirst',
+            options: { cacheName: 'api-cache' }
+          }
+        ]
       }
     })
   ],
-  server:  { host: true, proxy: { '/api': API } },
+  server: { host: true, proxy: { '/api': API } },
   preview: { host: true, proxy: { '/api': API } }
 })
