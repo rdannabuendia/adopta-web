@@ -13,7 +13,7 @@ public partial class Comentario
 
     public string Contenido { get; set; } = null!;
 
-    public DateTime? FechaComentario { get; set; }
+    public DateTime FechaComentario { get; set; }
 
     public virtual Publicacione IdPublicacionNavigation { get; set; } = null!;
 

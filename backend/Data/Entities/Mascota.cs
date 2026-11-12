@@ -19,7 +19,7 @@ public partial class Mascota
 
     public string? Raza { get; set; }
 
-    public string? Sexo { get; set; }
+    public string Sexo { get; set; } = null!;
 
     public DateTime? FechaNacimiento { get; set; }
 
@@ -37,11 +37,11 @@ public partial class Mascota
 
     public string? EstadoSalud { get; set; }
 
-    public bool? Vacunado { get; set; }
+    public bool Vacunado { get; set; }
 
-    public bool? Esterilizado { get; set; }
+    public bool Esterilizado { get; set; }
 
-    public DateTime? FechaRegistro { get; set; }
+    public DateTime FechaRegistro { get; set; }
 
     public virtual ICollection<Favorito> Favoritos { get; set; } = new List<Favorito>();
 

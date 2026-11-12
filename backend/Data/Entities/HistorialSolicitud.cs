@@ -13,7 +13,7 @@ public partial class HistorialSolicitud
 
     public string? Observacion { get; set; }
 
-    public DateTime? FechaCambio { get; set; }
+    public DateTime FechaCambio { get; set; }
 
     public virtual EstadosSolicitud IdEstadoSolicitudNavigation { get; set; } = null!;
 

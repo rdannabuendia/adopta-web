@@ -19,9 +19,17 @@ public partial class PerfilesAdoptante
 
     public string? TipoVivienda { get; set; }
 
-    public bool? TieneMascotas { get; set; }
+    public bool TieneMascotas { get; set; }
 
     public string? ExperienciaMascotas { get; set; }
+
+    public string? Ocupacion { get; set; }
+
+    public string? ContactoEmergenciaNombre { get; set; }
+
+    public string? ContactoEmergenciaTelefono { get; set; }
+
+    public string? ContactoEmergenciaParentesco { get; set; }
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

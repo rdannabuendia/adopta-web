@@ -15,7 +15,7 @@ public partial class HistorialAdaptacion
 
     public string? Observaciones { get; set; }
 
-    public DateTime? FechaCambio { get; set; }
+    public DateTime FechaCambio { get; set; }
 
     public virtual EstadosAdaptacion IdEstadoAdaptacionNavigation { get; set; } = null!;
 

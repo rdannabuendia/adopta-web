@@ -11,7 +11,7 @@ public partial class SolicitudesAdopcion
 
     public int IdAdoptante { get; set; }
 
-    public DateTime? FechaSolicitud { get; set; }
+    public DateTime FechaSolicitud { get; set; }
 
     public string? MotivoAdopcion { get; set; }
 
@@ -25,6 +25,12 @@ public partial class SolicitudesAdopcion
 
     public DateTime? FechaResolucion { get; set; }
 
+    public DateTime? FechaLimiteDocumentos { get; set; }
+
+    public DateTime? FechaEnvioDocumentos { get; set; }
+
+    public bool DocumentacionCompleta { get; set; }
+
     public virtual Adopcione? Adopcione { get; set; }
 
     public virtual ICollection<HistorialSolicitud> HistorialSolicituds { get; set; } = new List<HistorialSolicitud>();
@@ -34,4 +40,12 @@ public partial class SolicitudesAdopcion
     public virtual EstadosSolicitud IdEstadoSolicitudNavigation { get; set; } = null!;
 
     public virtual Mascota IdMascotaNavigation { get; set; } = null!;
+
+    public virtual InformacionComplementariaSolicitud? InformacionComplementariaSolicitud { get; set; }
+
+    public virtual ICollection<Notificacione> Notificaciones { get; set; } = new List<Notificacione>();
+
+    public virtual ICollection<ReferenciasPersonalesSolicitud> ReferenciasPersonalesSolicituds { get; set; } = new List<ReferenciasPersonalesSolicitud>();
+
+    public virtual ICollection<RequisitosSolicitud> RequisitosSolicituds { get; set; } = new List<RequisitosSolicitud>();
 }

@@ -19,5 +19,5 @@ public partial class Adopcione
 
     public virtual ICollection<ReportesSeguimiento> ReportesSeguimientos { get; set; } = new List<ReportesSeguimiento>();
 
-    public virtual ICollection<SolicitudesDevolucion> SolicitudesDevolucions { get; set; } = new List<SolicitudesDevolucion>();
+    public virtual SolicitudesDevolucion? SolicitudesDevolucion { get; set; }
 }

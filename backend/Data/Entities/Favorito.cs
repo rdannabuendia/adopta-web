@@ -11,7 +11,7 @@ public partial class Favorito
 
     public int IdMascota { get; set; }
 
-    public DateTime? FechaAgregado { get; set; }
+    public DateTime FechaAgregado { get; set; }
 
     public virtual Mascota IdMascotaNavigation { get; set; } = null!;
 

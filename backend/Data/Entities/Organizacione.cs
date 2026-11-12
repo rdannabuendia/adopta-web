@@ -25,9 +25,9 @@ public partial class Organizacione
 
     public string? SitioWeb { get; set; }
 
-    public DateTime? FechaRegistro { get; set; }
+    public DateTime FechaRegistro { get; set; }
 
-    public string? Estado { get; set; }
+    public string Estado { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 

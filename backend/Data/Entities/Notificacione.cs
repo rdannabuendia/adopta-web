@@ -15,9 +15,13 @@ public partial class Notificacione
 
     public string? Tipo { get; set; }
 
-    public bool? Leida { get; set; }
+    public bool Leida { get; set; }
 
-    public DateTime? FechaEnvio { get; set; }
+    public DateTime FechaEnvio { get; set; }
+
+    public int? IdSolicitud { get; set; }
+
+    public virtual SolicitudesAdopcion? IdSolicitudNavigation { get; set; }
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

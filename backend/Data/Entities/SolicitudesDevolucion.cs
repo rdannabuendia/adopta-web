@@ -11,15 +11,19 @@ public partial class SolicitudesDevolucion
 
     public string Explicacion { get; set; } = null!;
 
-    public DateTime? FechaSolicitud { get; set; }
+    public DateTime FechaSolicitud { get; set; }
 
-    public string? Estado { get; set; }
+    public string Estado { get; set; } = null!;
 
     public DateTime? FechaRevision { get; set; }
+
+    public int? IdUsuarioRevisor { get; set; }
 
     public string? ObservacionesOrganizacion { get; set; }
 
     public virtual ICollection<DetalleMotivosDevolucion> DetalleMotivosDevolucions { get; set; } = new List<DetalleMotivosDevolucion>();
 
     public virtual Adopcione IdAdopcionNavigation { get; set; } = null!;
+
+    public virtual Usuario? IdUsuarioRevisorNavigation { get; set; }
 }

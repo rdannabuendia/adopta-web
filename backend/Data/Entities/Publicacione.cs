@@ -13,9 +13,9 @@ public partial class Publicacione
 
     public string? Imagen { get; set; }
 
-    public DateTime? FechaPublicacion { get; set; }
+    public DateTime FechaPublicacion { get; set; }
 
-    public DateTime? FechaActualizacion { get; set; }
+    public DateTime FechaActualizacion { get; set; }
 
     public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 

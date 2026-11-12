@@ -11,7 +11,7 @@ public partial class LikesPublicacion
 
     public int IdUsuario { get; set; }
 
-    public DateTime? FechaLike { get; set; }
+    public DateTime FechaLike { get; set; }
 
     public virtual Publicacione IdPublicacionNavigation { get; set; } = null!;
 

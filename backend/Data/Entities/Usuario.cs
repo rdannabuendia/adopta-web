@@ -17,15 +17,20 @@ public partial class Usuario
 
     public string Correo { get; set; } = null!;
 
+    /// <summary>
+    /// Guardar hash BCrypt o Argon2, nunca texto plano
+    /// </summary>
     public string Contrasena { get; set; } = null!;
 
     public string? Telefono { get; set; }
 
     public string? FotoPerfil { get; set; }
 
-    public DateTime? FechaRegistro { get; set; }
+    public DateTime FechaRegistro { get; set; }
 
-    public string? Estado { get; set; }
+    public string Estado { get; set; } = null!;
+
+    public virtual ICollection<ArchivosRequisito> ArchivosRequisitos { get; set; } = new List<ArchivosRequisito>();
 
     public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 
@@ -47,5 +52,9 @@ public partial class Usuario
 
     public virtual ICollection<Publicacione> Publicaciones { get; set; } = new List<Publicacione>();
 
+    public virtual ICollection<RequisitosSolicitud> RequisitosSolicituds { get; set; } = new List<RequisitosSolicitud>();
+
     public virtual ICollection<SolicitudesAdopcion> SolicitudesAdopcions { get; set; } = new List<SolicitudesAdopcion>();
+
+    public virtual ICollection<SolicitudesDevolucion> SolicitudesDevolucions { get; set; } = new List<SolicitudesDevolucion>();
 }

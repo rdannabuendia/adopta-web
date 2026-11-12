@@ -19,7 +19,7 @@ public partial class ReportesSeguimiento
 
     public string? Observaciones { get; set; }
 
-    public DateTime? FechaReporte { get; set; }
+    public DateTime FechaReporte { get; set; }
 
     public virtual ICollection<FotosSeguimiento> FotosSeguimientos { get; set; } = new List<FotosSeguimiento>();
 

@@ -11,7 +11,7 @@ public partial class FotosMascotum
 
     public string RutaFoto { get; set; } = null!;
 
-    public bool? EsPrincipal { get; set; }
+    public bool EsPrincipal { get; set; }
 
     public virtual Mascota IdMascotaNavigation { get; set; } = null!;
 }
