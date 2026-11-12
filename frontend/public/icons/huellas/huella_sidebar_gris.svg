@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <g fill="#6B7D85">
+    <!-- Dedo central izquierdo -->
+    <ellipse cx="361" cy="232" rx="114" ry="159" transform="rotate(-3 361 232)" />
+    
+    <!-- Dedo central derecho -->
+    <ellipse cx="639" cy="235" rx="114" ry="159" transform="rotate(3 639 235)" />
+    
+    <!-- Dedo exterior izquierdo -->
+    <ellipse cx="161" cy="458" rx="112" ry="148" transform="rotate(-17 161 458)" />
+    
+    <!-- Dedo exterior derecho -->
+    <ellipse cx="839" cy="461" rx="112" ry="148" transform="rotate(17 839 461)" />
+
+    <!-- Almohadilla central -->
+    <path d="M 505 422
+             C 590 422, 642 465, 672 535
+             C 695 588, 725 630, 775 672
+             C 822 710, 842 765, 832 825
+             C 820 895, 755 938, 685 935
+             C 628 932, 580 882, 508 878
+             C 435 875, 390 936, 330 938
+             C 258 940, 195 892, 187 815
+             C 180 748, 212 702, 262 662
+             C 305 628, 326 582, 344 528
+             C 368 458, 425 422, 505 422 Z" />
+  </g>
+</svg>

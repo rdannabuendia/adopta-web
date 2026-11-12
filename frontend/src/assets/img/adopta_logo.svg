@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385 105" width="385" height="105">
+  <!-- Grupo de la Huella (Icono izquierdo) -->
+  <g fill="#64999D">
+    <!-- Dedo exterior izquierdo -->
+    <ellipse cx="22.5" cy="48" rx="8.2" ry="12.5" transform="rotate(-18 22.5 48)" />
+    <!-- Dedo central izquierdo -->
+    <ellipse cx="38.5" cy="27.5" rx="9" ry="14" transform="rotate(-6 38.5 27.5)" />
+    <!-- Dedo central derecho -->
+    <ellipse cx="59.5" cy="27.5" rx="9" ry="14" transform="rotate(6 59.5 27.5)" />
+    <!-- Dedo exterior derecho -->
+    <ellipse cx="75.5" cy="48" rx="8.2" ry="12.5" transform="rotate(18 75.5 48)" />
+
+    <!-- Almohadilla central -->
+    <path d="M 49 44.5 
+             C 38.5 44.5, 32.5 52, 29.5 60.5 
+             C 26.5 68.5, 22 73.5, 25 80.5 
+             C 27.5 86.5, 35.5 87.5, 41 84 
+             C 44.5 81.8, 46.5 80.8, 49 80.8 
+             C 51.5 80.8, 53.5 81.8, 57 84 
+             C 62.5 87.5, 70.5 86.5, 73 80.5 
+             C 76 73.5, 71.5 68.5, 68.5 60.5 
+             C 65.5 52, 59.5 44.5, 49 44.5 Z" />
+  </g>
+
+  <!-- Texto "Adopta" -->
+  <text x="95" y="79" fill="#64999D" font-family="&#39;Segoe UI&#39;, &#39;Roboto&#39;, &#39;Helvetica Neue&#39;, Arial, sans-serif" font-weight="700" font-size="67" letter-spacing="-1.2">Adopta</text>
+
+  <!-- Símbolo "+" geométrico para máxima fidelidad -->
+  <g fill="#64999D">
+    <!-- Barra vertical -->
+    <rect x="342.5" y="39" width="11.5" height="39" />
+    <!-- Barra horizontal -->
+    <rect x="328.75" y="52.75" width="39" height="11.5" />
+  </g>
+</svg>

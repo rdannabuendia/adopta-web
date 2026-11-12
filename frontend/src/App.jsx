@@ -1,14 +1,12 @@
-import axios from 'axios'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LandingPage from "./modules/landing/pages/LandingPage";
 
-const http = axios.create({
-  baseURL: import.meta.env.VITE_API_URL
-})
-
-// Agrega el token JWT a cada petición si existe
-http.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
-  if (token) config.headers.Authorization = `Bearer ${token}`
-  return config
-})
-
-export default http
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}

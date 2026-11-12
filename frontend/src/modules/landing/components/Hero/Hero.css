@@ -1,0 +1,188 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
+
+:root {
+  --teal-900: #2f6b7a;
+  --teal-700: #3f8796;
+  --teal-500: #5a9fab;
+  --teal-200: #cfe6e8;
+  --teal-100: #e3f2f3;
+  --text: #2e5560;
+}
+
+/* ---------- Contenedor Principal ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 80px); /* Ocupa el 100% del alto respetando el navbar de 80px */
+  min-height: 540px;
+  background-color: #eaf5f6;
+  font-family: "Outfit", sans-serif;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+/* ---------- Imagen del Banner ---------- */
+.hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% center; /* Distribuye perfectamente a las mascotas y la frase derecha */
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Eliminamos cualquier círculo o huella extra para que el banner se vea impecable */
+.hero__circle,
+.hero__paw {
+  display: none !important;
+}
+
+/* ---------- Contenido Izquierdo ---------- */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  width: min(460px, 44%);
+  margin-left: clamp(40px, 11vw, 180px);
+}
+
+.hero__badge {
+  display: inline-block;
+  background: var(--teal-100);
+  color: var(--teal-700);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 6px 15px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.hero__title {
+  margin: 0 0 16px;
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  line-height: 1.08;
+  font-weight: 700;
+  color: var(--teal-700);
+  white-space: nowrap;
+}
+
+.hero__text {
+  margin: 0 0 26px;
+  text-align: justify;
+  max-width: 390px;
+  font-size: clamp(0.88rem, 1.05vw, 1rem);
+  line-height: 1.6;
+  padding-bottom: 5%;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 14px;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn--primary,
+.btn--primary:visited,
+.btn--primary:hover,
+.btn--primary:active {
+  background: var(--teal-700);
+  color: #ffffff !important;
+  border: 1.5px solid var(--teal-700);
+  box-shadow: 0 6px 14px rgba(63, 135, 150, 0.25);
+}
+
+.btn--primary:hover {
+  background: var(--teal-900);
+}
+
+.btn--outline {
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--teal-700);
+  border: 1.5px solid var(--teal-500);
+}
+
+.btn--outline:hover {
+  background: var(--teal-100);
+}
+
+.btn__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.hero::before,
+.hero::after,
+#inicio::before,
+#inicio::after,
+.hero > span,
+.hero [class*="circle"] {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+}
+
+/* ---------- Tablet / Móvil ---------- */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    height: auto;
+    min-height: auto;
+    padding: 0 0 40px;
+  }
+
+  .hero__img {
+    position: static;
+    width: 100%;
+    height: auto;
+    object-position: right center;
+  }
+
+  .hero__content {
+    width: auto;
+    margin: 24px 24px 0;
+    text-align: center;
+  }
+
+  .hero__title {
+    white-space: normal;
+  }
+
+  .hero__text {
+    max-width: 100%;
+  }
+
+  .hero__actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    width: 100%;
+  }
+}
