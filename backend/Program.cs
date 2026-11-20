@@ -36,6 +36,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+builder.Services.AddScoped<IOrganizacionService, OrganizacionService>();
 
 // CORS
 builder.Services.AddCors(o => o.AddPolicy("front", p => p

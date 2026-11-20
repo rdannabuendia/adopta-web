@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-const API = 'http://localhost:5000'
+const API = 'http://localhost:5050'
 
 export default defineConfig({
   plugins: [
@@ -23,6 +23,8 @@ export default defineConfig({
         ]
       },
       workbox: {
+        // Evita que el Service Worker sirva index.html en lugar de ir a la API
+        navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/api'),
@@ -33,6 +35,24 @@ export default defineConfig({
       }
     })
   ],
-  server: { host: true, proxy: { '/api': API } },
-  preview: { host: true, proxy: { '/api': API } }
+  server: {
+    host: true,
+    proxy: {
+      '/api': {
+        target: API,
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
+  preview: {
+    host: true,
+    proxy: {
+      '/api': {
+        target: API,
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  }
 })
