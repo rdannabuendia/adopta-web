@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Faq.css";
-// Cambia la ruta por la de tu gatito (PNG con fondo transparente)
+import BaseButton from "../../../../components/ui/BaseButton";
 import gatito from "../../../../assets/img/image.png";
 
 const MaskIcon = ({ src, className = "" }) => (
@@ -12,7 +12,11 @@ const MaskIcon = ({ src, className = "" }) => (
 );
 
 const Heart = ({ className = "" }) => (
-  <svg className={`faq__heart ${className}`} viewBox="0 0 48 44" aria-hidden="true">
+  <svg
+    className={`faq__heart ${className}`}
+    viewBox="0 0 48 44"
+    aria-hidden="true"
+  >
     <path
       d="M24 40C10 30 4 22 4 14.5 4 9 8.4 5 13.5 5c4 0 7.5 2.4 10.5 7 3-4.6 6.5-7 10.5-7C39.6 5 44 9 44 14.5 44 22 38 30 24 40Z"
       fill="none"
@@ -24,7 +28,13 @@ const Heart = ({ className = "" }) => (
 
 const Arrow = () => (
   <svg className="arrow" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M5 12h14M13 6l6 6-6 6" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="M5 12h14M13 6l6 6-6 6"
+      fill="none"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -64,7 +74,7 @@ export default function Faq() {
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -88,7 +98,10 @@ export default function Faq() {
 
           <div className="faq__cta-text">
             <span className="faq__label">
-              <MaskIcon src="/icons/huellas/huella_g.svg" className="faq__label-icon" />
+              <MaskIcon
+                src="/icons/huellas/huella_g.svg"
+                className="faq__label-icon"
+              />
               Únete a nuestra comunidad
             </span>
             <h2 className="faq__title">
@@ -100,24 +113,29 @@ export default function Faq() {
               Ya sea que quieras adoptar, apoyar a una organización o
               simplemente conocer más, ¡te esperamos!
             </p>
-            <a href="/registro" className="faq__btn">
+            <BaseButton href="/registro" size="lg" iconRight={<Arrow />}>
               Regístrate ahora
-              <Arrow />
-            </a>
+            </BaseButton>
           </div>
         </div>
 
         {/* ---------- Derecha: panel de dudas ---------- */}
         <div className="faq__panel">
-          <MaskIcon src="/icons/huellas/huella_g.svg" className="faq__panel-paw" />
+          <MaskIcon
+            src="/icons/huellas/huella_g.svg"
+            className="faq__panel-paw"
+          />
 
           <header className="faq__panel-header">
-            <MaskIcon src="/icons/huellas/huella_g.svg" className="faq__panel-icon" />
+            <MaskIcon
+              src="/icons/huellas/huella_g.svg"
+              className="faq__panel-icon"
+            />
             <div>
               <h3 className="faq__panel-title">¿Tienes dudas?</h3>
               <p className="faq__panel-text">
-                Consulta nuestras preguntas frecuentes o contáctanos directamente.
-                Estamos para ayudarte.
+                Consulta nuestras preguntas frecuentes o contáctanos
+                directamente. Estamos para ayudarte.
               </p>
             </div>
           </header>

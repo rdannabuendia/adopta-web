@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./HowItWorks.css";
 
-/*
-  Los SVG de /public se sirven desde la raíz: usa "/icons/..." (no "../../public/...").
-  MaskIcon pinta el SVG con el color del texto (currentColor), así se puede
-  cambiar de color en hover/activo y animarlo igual que un SVG en línea.
-*/
 const MaskIcon = ({ src, className = "" }) => (
   <span
     className={`mask-icon ${className}`}

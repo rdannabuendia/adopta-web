@@ -1,8 +1,13 @@
 import "./Hero.css";
 import banner from "../../../../assets/img/banner_inicio.jpg";
+import BaseButton from "../../../../components/ui/BaseButton";
 
 const HuellaBlanca = ({ className = "" }) => (
-  <img src="../../../../../public/icons/huellas/huella_blanca.svg" alt="Paw icon" className={className} />
+  <img
+    src="/icons/huellas/huella_blanca.svg"
+    alt="Paw icon"
+    className={className}
+  />
 );
 
 export default function Hero() {
@@ -24,19 +29,18 @@ export default function Hero() {
         </h1>
 
         <p className="hero__text">
-          En Adopta+ conectamos a personas que quieren dar un hogar con
-          mascotas que lo necesitan. También te acompañamos después de la
-          adopción, para que sea un comienzo feliz y seguro.
+          En Adopta+ conectamos a personas que quieren dar un hogar con mascotas
+          que lo necesitan. También te acompañamos después de la adopción, para
+          que sea un comienzo feliz y seguro.
         </p>
 
         <div className="hero__actions">
-          <a href="/mascotas" className="btn btn--primary">
-            <HuellaBlanca className="btn__icon" />
+          <BaseButton href="/mascotas" icon={<img src="/icons/huellas/huella_blanca.svg" alt="" />}>
             Ver mascotas
-          </a>
-          <a href="/nosotros" className="btn btn--outline">
+          </BaseButton>
+          <BaseButton href="/nosotros" variant="secondary">
             Conoce más
-          </a>
+          </BaseButton>
         </div>
       </div>
     </section>

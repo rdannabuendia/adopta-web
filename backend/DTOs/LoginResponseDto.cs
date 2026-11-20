@@ -1,0 +1,22 @@
+namespace Adopta.Api.DTOs;
+
+public class UsuarioDto
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Rol { get; set; } = string.Empty;
+}
+
+public class LoginResponseDto
+{
+    public string Token { get; set; } = string.Empty;
+    public DateTime Expiracion { get; set; }
+    public UsuarioDto Usuario { get; set; } = new();
+}
+
+/// <summary>Formato de error que el front lee en data.mensaje</summary>
+public class ErrorResponseDto
+{
+    public string Mensaje { get; set; } = string.Empty;
+}

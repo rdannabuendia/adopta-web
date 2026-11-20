@@ -85,55 +85,6 @@
   gap: 14px;
 }
 
-/* ---------- Botones ---------- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 26px;
-  border-radius: 12px;
-  font-family: inherit;
-  font-size: 0.88rem;
-  font-weight: 500;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn--primary,
-.btn--primary:visited,
-.btn--primary:hover,
-.btn--primary:active {
-  background: var(--teal-700);
-  color: #ffffff !important;
-  border: 1.5px solid var(--teal-700);
-  box-shadow: 0 6px 14px rgba(63, 135, 150, 0.25);
-}
-
-.btn--primary:hover {
-  background: var(--teal-900);
-}
-
-.btn--outline {
-  background: rgba(255, 255, 255, 0.65);
-  color: var(--teal-700);
-  border: 1.5px solid var(--teal-500);
-}
-
-.btn--outline:hover {
-  background: var(--teal-100);
-}
-
-.btn__icon {
-  width: 16px;
-  height: 16px;
-}
-
 .hero::before,
 .hero::after,
 #inicio::before,
@@ -178,11 +129,5 @@
   .hero__actions {
     flex-wrap: wrap;
     justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .btn {
-    width: 100%;
   }
 }
