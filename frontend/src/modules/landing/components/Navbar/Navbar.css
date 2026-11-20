@@ -80,35 +80,6 @@
   gap: 8px;
 }
 
-/* Botones compactos como en el diseño */
-.btn {
-  min-width: 88px;
-  padding: 5px 14px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  box-sizing: border-box;
-  transition: opacity 0.2s;
-}
-
-.btn:hover {
-  opacity: 0.85;
-}
-
-.btn--outline {
-  background: #fff;
-  color: var(--teal);
-  border: 1px solid #d7e6e5;
-}
-
-.btn--solid {
-  background: var(--teal);
-  color: #fff;
-  border: 1px solid var(--teal);
-}
-
 /* Hamburguesa (solo móvil) */
 .header__toggle {
   display: none;

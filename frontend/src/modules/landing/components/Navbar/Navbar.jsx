@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import logo from "../../../../assets/img/adopta_logo.svg"; 
+import logo from "../../../../assets/img/adopta_logo.svg";
+import BaseButton from "../../../../components/ui/BaseButton";
 import "./Navbar.css";
 
 const LINKS = [
@@ -28,7 +28,7 @@ export default function Navbar() {
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => e.isIntersecting && setActivo(e.target.id)),
-      { rootMargin: "-40% 0px -55% 0px" }
+      { rootMargin: "-40% 0px -55% 0px" },
     );
     LINKS.forEach(({ id }) => {
       const el = document.getElementById(id);
@@ -68,8 +68,15 @@ export default function Navbar() {
               </a>
             ))}
             <button className="header__search" aria-label="Buscar">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
                 <circle cx="11" cy="11" r="7" />
                 <line x1="16.5" y1="16.5" x2="21" y2="21" />
               </svg>
@@ -77,12 +84,17 @@ export default function Navbar() {
           </nav>
 
           <div className="header__actions">
-            <Link to="/login" className="btn btn--outline" onClick={cerrar}>
+            <BaseButton
+              to="/login"
+              variant="secondary"
+              size="sm"
+              onClick={cerrar}
+            >
               Iniciar Sesión
-            </Link>
-            <Link to="/register" className="btn btn--solid" onClick={cerrar}>
+            </BaseButton>
+            <BaseButton to="/registro-organizacion" size="sm" onClick={cerrar}>
               Registrarse
-            </Link>
+            </BaseButton>
           </div>
         </div>
       </div>

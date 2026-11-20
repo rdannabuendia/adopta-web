@@ -43,26 +43,6 @@
 .landing ul, .landing ol { margin: 0; }
 
 /* ===== Piezas reutilizables ===== */
-.landing .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 8px;
-  font-weight: 600;
-  border: 1.5px solid var(--teal);
-  transition: transform 0.15s, background 0.2s, color 0.2s;
-  cursor: pointer;
-}
-.landing .btn:hover { transform: translateY(-1px); }
-.landing .btn--solid { background: var(--teal); color: #fff; }
-.landing .btn--solid:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
-.landing .btn--outline { background: transparent; color: var(--teal-dark); }
-.landing .btn--outline:hover { background: var(--teal); color: #fff; }
-.landing .btn--sm { padding: 6px 14px; font-size: 12px; border-radius: 6px; }
-.landing .btn--md { padding: 9px 22px; font-size: 12px; }
-.landing .btn--lg { padding: 12px 30px; font-size: 14px; min-width: 150px; }
-
 .landing .chip {
   display: inline-block;
   padding: 4px 14px;

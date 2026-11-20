@@ -11,6 +11,8 @@ public partial class Organizacione
 
     public string Nombre { get; set; } = null!;
 
+    public string? TipoOrganizacion { get; set; }
+
     public string? Descripcion { get; set; }
 
     public string? Direccion { get; set; }
@@ -28,6 +30,8 @@ public partial class Organizacione
     public DateTime FechaRegistro { get; set; }
 
     public string Estado { get; set; } = null!;
+
+    public virtual ICollection<DocumentosOrganizacion> DocumentosOrganizacions { get; set; } = new List<DocumentosOrganizacion>();
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 

@@ -20,6 +20,8 @@ public partial class AdoptaDbContext : DbContext
 
     public virtual DbSet<DetalleMotivosDevolucion> DetalleMotivosDevolucions { get; set; }
 
+    public virtual DbSet<DocumentosOrganizacion> DocumentosOrganizacions { get; set; }
+
     public virtual DbSet<EstadosAdaptacion> EstadosAdaptacions { get; set; }
 
     public virtual DbSet<EstadosMascotum> EstadosMascota { get; set; }
@@ -67,6 +69,8 @@ public partial class AdoptaDbContext : DbContext
     public virtual DbSet<SolicitudesDevolucion> SolicitudesDevolucions { get; set; }
 
     public virtual DbSet<TiposDocumento> TiposDocumentos { get; set; }
+
+    public virtual DbSet<TokensRecuperacion> TokensRecuperacions { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
@@ -217,6 +221,43 @@ public partial class AdoptaDbContext : DbContext
                 .HasForeignKey(d => d.IdMotivo)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_detalle_motivo");
+        });
+
+        modelBuilder.Entity<DocumentosOrganizacion>(entity =>
+        {
+            entity.HasKey(e => e.IdDocumento).HasName("PRIMARY");
+
+            entity.ToTable("documentos_organizacion");
+
+            entity.HasIndex(e => new { e.IdOrganizacion, e.TipoDocumento }, "uq_doc_org_tipo").IsUnique();
+
+            entity.Property(e => e.IdDocumento).HasColumnName("id_documento");
+            entity.Property(e => e.FechaCarga)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_carga");
+            entity.Property(e => e.HashSha256)
+                .HasMaxLength(64)
+                .IsFixedLength()
+                .HasColumnName("hash_sha256");
+            entity.Property(e => e.IdOrganizacion).HasColumnName("id_organizacion");
+            entity.Property(e => e.MimeType)
+                .HasMaxLength(100)
+                .HasColumnName("mime_type");
+            entity.Property(e => e.NombreOriginal)
+                .HasMaxLength(255)
+                .HasColumnName("nombre_original");
+            entity.Property(e => e.RutaRelativa)
+                .HasMaxLength(255)
+                .HasColumnName("ruta_relativa");
+            entity.Property(e => e.TamanoBytes).HasColumnName("tamano_bytes");
+            entity.Property(e => e.TipoDocumento)
+                .HasColumnType("enum('ExistenciaLegal','ComprobanteDomicilio','IdentificacionResponsable')")
+                .HasColumnName("tipo_documento");
+
+            entity.HasOne(d => d.IdOrganizacionNavigation).WithMany(p => p.DocumentosOrganizacions)
+                .HasForeignKey(d => d.IdOrganizacion)
+                .HasConstraintName("fk_doc_org");
         });
 
         modelBuilder.Entity<EstadosAdaptacion>(entity =>
@@ -675,6 +716,9 @@ public partial class AdoptaDbContext : DbContext
             entity.Property(e => e.Telefono)
                 .HasMaxLength(20)
                 .HasColumnName("telefono");
+            entity.Property(e => e.TipoOrganizacion)
+                .HasMaxLength(60)
+                .HasColumnName("tipo_organizacion");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithOne(p => p.Organizacione)
                 .HasForeignKey<Organizacione>(d => d.IdUsuario)
@@ -1051,6 +1095,35 @@ public partial class AdoptaDbContext : DbContext
                 .HasDefaultValueSql("'5'")
                 .HasColumnName("tamano_max_mb");
             entity.Property(e => e.VigenciaMeses).HasColumnName("vigencia_meses");
+        });
+
+        modelBuilder.Entity<TokensRecuperacion>(entity =>
+        {
+            entity.HasKey(e => e.IdToken).HasName("PRIMARY");
+
+            entity.ToTable("tokens_recuperacion");
+
+            entity.HasIndex(e => new { e.IdUsuario, e.FechaCreacion }, "idx_token_usuario");
+
+            entity.HasIndex(e => e.TokenHash, "token_hash").IsUnique();
+
+            entity.Property(e => e.IdToken).HasColumnName("id_token");
+            entity.Property(e => e.FechaCreacion)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_creacion");
+            entity.Property(e => e.FechaExpiracion)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_expiracion");
+            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            entity.Property(e => e.TokenHash)
+                .HasMaxLength(64)
+                .IsFixedLength()
+                .HasColumnName("token_hash");
+            entity.Property(e => e.Usado).HasColumnName("usado");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.TokensRecuperacions)
+                .HasForeignKey(d => d.IdUsuario)
+                .HasConstraintName("fk_token_usuario");
         });
 
         modelBuilder.Entity<Usuario>(entity =>

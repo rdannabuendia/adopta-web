@@ -406,69 +406,6 @@ div.info-card:hover {
   background: #fffafa;
 }
 
-/* ---------- Botones ---------- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  align-self: flex-start;
-  padding: 15px 36px;
-  border-radius: 14px;
-  font-family: inherit;
-  font-size: 0.97rem;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease,
-    background 0.25s ease, opacity 0.25s ease;
-}
-
-.btn svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-  transition: transform 0.3s ease;
-}
-
-.btn--primary {
-  border: none;
-  background: linear-gradient(135deg, var(--teal-500), var(--teal-700));
-  color: #fff;
-  box-shadow: 0 10px 22px rgba(63, 135, 150, 0.3);
-}
-
-.btn--primary:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 28px rgba(63, 135, 150, 0.38);
-}
-
-.btn--primary:hover:not(:disabled) svg {
-  transform: translate(3px, -3px);
-}
-
-.btn--primary:disabled {
-  opacity: 0.75;
-  cursor: progress;
-}
-
-.btn--outline {
-  background: transparent;
-  color: var(--teal-700);
-  border: 2px solid var(--teal-500);
-  align-self: center;
-}
-
-.btn--outline:hover {
-  background: var(--teal-100);
-  transform: translateY(-2px);
-}
-
-.btn:focus-visible {
-  outline: 3px solid rgba(90, 159, 171, 0.5);
-  outline-offset: 3px;
-}
-
 .spinner {
   width: 18px;
   height: 18px;
@@ -600,10 +537,6 @@ div.info-card:hover {
     display: none;
   }
 
-  .btn--primary {
-    width: 100%;
-    align-self: stretch;
-  }
 }
 
 /* ---------- Accesibilidad ---------- */

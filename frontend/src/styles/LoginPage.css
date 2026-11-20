@@ -1,0 +1,263 @@
+/* ===== LoginPage ===== */
+:root {
+  --auth-teal: #6aa3a3;
+  --auth-teal-dark: #5a9191;
+  --auth-link: #4cb393;
+  --auth-title: #1d3f5c;
+}
+
+.login-page {
+  display: grid;
+  grid-template-columns: minmax(420px, 58%) minmax(340px, 42%);
+  min-height: 100dvh;
+  background: #fbfdfd;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ---------- Panel izquierdo ---------- */
+.login-page__panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  overflow: hidden;
+}
+
+.login-page__content {
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-form__register {
+  margin: 8px 0 0;
+  padding-left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.88rem;
+  color: #111;
+} 
+
+.login-page__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 56px;
+  font-size: 2.35rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--auth-teal);
+}
+
+.login-page__brand-icon {
+  font-size: 2.2rem;
+  mix-blend-mode: multiply;
+}
+
+.login-page__header {
+  margin-bottom: 28px;
+}
+
+.login-page__header h1 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--auth-title);
+}
+
+.login-page__header p {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+  color: #111;
+}
+
+/* Huellas decorativas esquina inferior izquierda */
+.login-page__deco {
+  position: absolute;
+  color: var(--auth-teal);
+  pointer-events: none;
+  mix-blend-mode: multiply; /* Elimina el recuadro blanco */
+}
+
+.login-page__deco--sm {
+  left: 22px;
+  bottom: 84px;
+  width: 48px;
+  height: 48px;
+  transform: rotate(-16deg);
+}
+
+.login-page__deco--lg {
+  left: 68px;
+  bottom: 20px;
+  width: 68px;
+  height: 68px;
+  transform: rotate(-12deg);
+}
+
+/* ---------- Formulario ---------- */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-form__forgot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -6px;
+  margin-bottom: 16px;
+}
+
+.login-form__register {
+  margin: 6px 0 0;
+  padding-left: 34px; /* Alineación idéntica a la segunda imagen */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.88rem;
+  color: #111;
+}
+
+/* ---------- Panel derecho (imagen) ---------- */
+.login-page__hero {
+  background-color: #f4f8f8;
+  background-size: 100% auto; 
+  background-position: center center;
+  background-repeat: no-repeat;
+  min-height: 100%;
+}
+/* Links de recuperar contraseña y registro */
+.login-form__link {
+  color: var(--auth-link);
+  font-size: 0.88rem;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.login-form__link:hover {
+  color: var(--auth-teal-dark);
+  text-decoration: underline;
+}
+
+.login-form__link:focus-visible {
+  outline: 2px solid var(--auth-teal);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.login-form__link--xs {
+  font-size: 0.75rem;
+}
+
+/* ===== Recuperar / cambiar contraseña ===== */
+.login-page__header--center {
+  text-align: center;
+}
+
+.login-page__header--center h1 {
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+}
+
+.login-page__email-mask {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: #111;
+}
+
+.login-page__notice {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.login-form__success {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  color: #1e6b55;
+  background: #e8f6f1;
+  border: 1px solid #bfe6d9;
+  border-radius: 8px;
+}
+
+.login-form__resend {
+  margin-top: -6px;
+}
+
+.login-form__center {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.login-form__legal {
+  margin: 4px 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--auth-link);
+}
+
+/* Link deshabilitado (cuenta regresiva) */
+.login-page .base-btn--link:disabled {
+  opacity: 0.65;
+  cursor: default;
+  text-decoration: none;
+}
+
+/* ---------- Responsive ---------- */
+/* Laptops pequeñas y tablets horizontales */
+@media (max-width: 1100px) {
+  .login-page {
+    grid-template-columns: 56% 44%;
+  }
+
+  .login-page__hero {
+    background-size: cover;
+    background-position: center 35%;
+  }
+}
+
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page__hero {
+    display: none;
+  }
+
+  .login-page__brand {
+    margin-bottom: 40px;
+  }
+}
+
+/* Tablets verticales y móviles */
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page__panel {
+    justify-content: center;
+    padding: 48px 24px;
+  }
+
+  .login-page__hero {
+    display: none;
+  }
+
+  .login-page__brand {
+    margin-bottom: 40px;
+  }
+}

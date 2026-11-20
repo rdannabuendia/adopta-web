@@ -1,0 +1,197 @@
+/* ===== Solicitud de registro de organización ===== */
+.registro-page {
+  --auth-teal: #6aa3a3;
+  --auth-teal-dark: #5a9191;
+  --auth-link: #2f9d78;
+  --auth-title: #16365a;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 48px 20px;
+  overflow: hidden;
+  background: #fff;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Huellas decorativas */
+.registro-page__deco {
+  position: absolute;
+  color: var(--auth-teal);
+  pointer-events: none;
+}
+.registro-page__deco--tl  { top: 6%;     left: 5%;  width: 84px; height: 84px; transform: rotate(-12deg); }
+.registro-page__deco--tr  { top: 6%;     right: 6%; width: 60px; height: 60px; transform: rotate(14deg); }
+.registro-page__deco--bl1 { bottom: 14%; left: 6%;  width: 44px; height: 44px; transform: rotate(-20deg); }
+.registro-page__deco--bl2 { bottom: 4%;  left: 10%; width: 58px; height: 58px; transform: rotate(-8deg); }
+.registro-page__deco--br  { bottom: 4%;  right: 7%; width: 84px; height: 84px; transform: rotate(10deg); }
+
+/* Tarjeta */
+.registro-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  padding: 30px 32px 26px;
+  background: #fff;
+  border: 1px solid #333;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(22, 54, 90, 0.08);
+}
+
+.registro-card__header h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--auth-title);
+}
+
+.registro-card__paw {
+  flex-shrink: 0;
+  font-size: 1.6rem;
+  color: var(--auth-teal);
+}
+
+.registro-card__header p {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: #111;
+}
+
+/* Secciones */
+.registro-section__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--auth-title);
+}
+
+.registro-section__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: #2f7f7f;
+  background: #dff1ef;
+  border-radius: 8px;
+}
+
+/* Rejillas */
+.registro-grid {
+  display: grid;
+  gap: 16px 20px;
+  margin-bottom: 16px;
+}
+.registro-grid--2 { grid-template-columns: 1fr 1fr; }
+.registro-grid--3 { grid-template-columns: 1fr 1fr 1.5fr; }
+
+.registro-docs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Inputs más compactos que los del login */
+.registro-form .base-input__label {
+  padding-left: 0;
+  font-size: 0.85rem;
+  color: #1f3b52;
+}
+
+.registro-form .base-input__field {
+  height: 40px;
+  padding: 0 12px;
+  border-color: #7a7a7a;
+  border-radius: 6px;
+}
+
+.registro-form .base-input__control {
+  font-size: 0.9rem;
+}
+
+.registro-form .base-input__message {
+  padding-left: 0;
+}
+
+/* Pie */
+.registro-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.registro-page .base-btn--primary {
+  background: var(--auth-teal);
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.registro-page .base-btn--primary:hover:not(:disabled) {
+  background: var(--auth-teal-dark);
+}
+
+.registro-page .base-btn--primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.registro-form__submit {
+  min-width: 200px;
+}
+
+/* Pantalla de éxito */
+.registro-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 8px;
+  text-align: center;
+}
+
+.registro-success__icon {
+  color: var(--auth-teal);
+}
+
+.registro-success h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--auth-title);
+}
+
+.registro-success p {
+  max-width: 440px;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #222;
+}
+
+.registro-success__note {
+  margin-bottom: 14px !important;
+  font-size: 0.85rem !important;
+  color: #666 !important;
+}
+
+/* Responsive */
+@media (max-width: 760px) {
+  .registro-card { padding: 24px 18px 20px; }
+  .registro-card__header h1 { font-size: 1.4rem; }
+  .registro-grid--2,
+  .registro-grid--3,
+  .registro-docs { grid-template-columns: 1fr; }
+  .registro-footer { flex-direction: column; align-items: stretch; }
+  .registro-form__submit { width: 100%; }
+  .registro-page__deco { display: none; }
+}
