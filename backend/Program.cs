@@ -5,6 +5,7 @@ using Adopta.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +38,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<IOrganizacionService, OrganizacionService>();
+builder.Services.AddScoped<IPerfilService, PerfilService>();
 
 // CORS
 builder.Services.AddCors(o => o.AddPolicy("front", p => p
@@ -58,10 +60,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
+// Carpeta pública de imágenes (fotos de perfil, y después las de mascotas)
+var uploadsRoot = Path.Combine(builder.Environment.ContentRootPath, cfg["Storage:PublicRoot"] ?? "Uploads");
+Directory.CreateDirectory(uploadsRoot);
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsRoot),
+    RequestPath = "/uploads"
+});
 
 app.UseCors("front");
 app.UseAuthentication();

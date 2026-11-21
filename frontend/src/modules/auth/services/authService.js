@@ -85,3 +85,9 @@ export const validateResetToken = (token) =>
 
 export const resetPassword = ({ token, nuevaPassword, confirmarPassword }) =>
   post("reset-password", { token, nuevaPassword, confirmarPassword });
+
+export function updateStoredUser(changes) {
+  const current = getUser();
+  if (!current) return;
+  localStorage.setItem(USER_KEY, JSON.stringify({ ...current, ...changes }));
+}

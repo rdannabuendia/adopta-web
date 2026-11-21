@@ -5,6 +5,7 @@ import { getUser, logout } from "../../modules/auth/services/authService";
 import { getPageTitle, getVisibleNav, ROLES } from "./navigation";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import PawDecor from "../ui/PawDecor";
 import "../../styles/AppLayout.css";
 
 export default function AppLayout() {
@@ -15,7 +16,6 @@ export default function AppLayout() {
 
   const items = useMemo(() => getVisibleNav(user?.rol), [user?.rol]);
 
-  // En móvil, cierra el menú al navegar
   useEffect(() => setMenuOpen(false), [pathname]);
 
   const handleLogout = () => {
@@ -24,7 +24,8 @@ export default function AppLayout() {
   };
 
   const section = getPageTitle(pathname, items);
-  const title = user?.rol === ROLES.ORG ? `${section} · ${user.nombre}` : section;
+  const title =
+    user?.rol === ROLES.ORG ? `${section} · ${user.nombre}` : section;
 
   return (
     <div className="app-shell">
@@ -37,16 +38,21 @@ export default function AppLayout() {
       />
 
       <Sidebar items={items} open={menuOpen} onLogout={handleLogout} />
-      {menuOpen && <div className="app-shell__backdrop" onClick={() => setMenuOpen(false)} />}
+      {menuOpen && (
+        <div
+          className="app-shell__backdrop"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
 
       <main className="app-shell__main">
         <Outlet />
       </main>
 
-      <PawIcon className="app-shell__deco app-shell__deco--l1" />
-      <PawIcon className="app-shell__deco app-shell__deco--l2" />
-      <PawIcon className="app-shell__deco app-shell__deco--r1" />
-      <PawIcon className="app-shell__deco app-shell__deco--r2" />
+      <PawDecor className="app-shell__deco app-shell__deco--l1" />
+      <PawDecor className="app-shell__deco app-shell__deco--l2" />
+      <PawDecor className="app-shell__deco app-shell__deco--r1" />
+      <PawDecor className="app-shell__deco app-shell__deco--r2" />
     </div>
   );
 }

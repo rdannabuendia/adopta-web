@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Avatar from "../ui/Avatar";
 import DropdownMenu from "../ui/DropdownMenu";
 import IconButton from "../ui/IconButton";
+import { mediaUrl } from "../../utils/media";
 import { ChevronDownIcon, LogoutIcon, MenuIcon, PawIcon, UserIcon } from "../ui/Icons";
 
 export default function Topbar({ user, title, menuOpen, onToggleMenu, onLogout }) {
@@ -31,7 +32,7 @@ export default function Topbar({ user, title, menuOpen, onToggleMenu, onLogout }
         triggerClassName="user-trigger"
         trigger={({ open }) => (
           <>
-            <Avatar name={firstName} />
+            <Avatar name={firstName} src={mediaUrl(user?.fotoUrl)} />
             <span className="user-trigger__name">{firstName}</span>
             <ChevronDownIcon className={`user-trigger__chevron${open ? " is-open" : ""}`} />
           </>

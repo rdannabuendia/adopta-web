@@ -10,19 +10,12 @@ import {
 
 export const ROLES = {
   ADMIN: "Administrador",
-  ORG: "Organizacion",
-  ADOPTANTE: "Adoptante",
+  ORG: "Organizacion"
 };
 
 const TODOS = [ROLES.ADMIN, ROLES.ORG, ROLES.ADOPTANTE];
 const ADMIN_ORG = [ROLES.ADMIN, ROLES.ORG];
 
-/*
- * item con `to`       → link directo
- * item con `children` → submenú desplegable
- * `end: true`         → el link solo se marca activo en la ruta exacta
- * `roles`             → quién lo ve (en un hijo, restringe ese hijo)
- */
 export const NAV_ITEMS = [
   {
     label: "Inicio",

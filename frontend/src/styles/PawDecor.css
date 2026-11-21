@@ -1,0 +1,5 @@
+.paw-decor {
+    display: block;
+    object-fit: contain;
+    user-select: none;
+}

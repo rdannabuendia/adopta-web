@@ -8,6 +8,8 @@ import AppLayout from "./components/layout/AppLayout";
 import PlaceholderPage from "./components/layout/PlaceholderPage";
 import ProtectedRoute from "./modules/auth/components/ProtectedRoute";
 import DashboardPage from "./modules/dashboard/pages/DashboardPage";
+import PerfilPage from "./modules/auth/pages/PerfilPage";
+import EditarPerfilPage from "./modules/auth/pages/EditarPerfilPage";
 
 const ADMIN = ["Administrador"];
 const ORG = ["Organizacion"];
@@ -28,10 +30,8 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/inicio" element={<DashboardPage />} />
-            <Route
-              path="/perfil"
-              element={<PlaceholderPage title="Mi perfil" />}
-            />
+            <Route path="/perfil" element={<PerfilPage />} />
+            <Route path="/perfil/editar" element={<EditarPerfilPage />} />
 
             {/* Solo administrador */}
             <Route element={<ProtectedRoute roles={ADMIN} />}>

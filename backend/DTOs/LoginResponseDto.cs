@@ -6,6 +6,7 @@ public class UsuarioDto
     public string Nombre { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Rol { get; set; } = string.Empty;
+    public string? FotoUrl { get; set; }
 }
 
 public class LoginResponseDto
@@ -14,8 +15,6 @@ public class LoginResponseDto
     public DateTime Expiracion { get; set; }
     public UsuarioDto Usuario { get; set; } = new();
 }
-
-/// <summary>Formato de error que el front lee en data.mensaje</summary>
 public class ErrorResponseDto
 {
     public string Mensaje { get; set; } = string.Empty;

@@ -14,17 +14,9 @@ import {
 import { enviarSolicitudOrganizacion } from "../services/registroOrganizacionService";
 import "../../../styles/LoginPage.css";
 import "../../../styles/RegistroOrganizacion.css";
+import { TIPOS_ORGANIZACION } from "../../../constants/organizacion";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const TIPOS_ORGANIZACION = [
-  "Refugio",
-  "Rescatista independiente",
-  "Asociación civil / ONG",
-  "Fundación",
-  "Clínica veterinaria",
-  "Otro",
-];
 
 const INITIAL_VALUES = {
   nombre: "",

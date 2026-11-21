@@ -11,7 +11,6 @@ function SidebarGroup({ item }) {
   const listId = useId();
   const Icon = item.icon;
 
-  // Si navegas (por cualquier vía) a una ruta del grupo, se abre solo
   useEffect(() => {
     if (inside) setOpen(true);
   }, [inside]);
@@ -86,18 +85,16 @@ export default function Sidebar({ items, open, onLogout }) {
         )}
       </ul>
 
-      <button type="button" className="side-logout" onClick={onLogout}>
-        <BaseButton
-          variant="secondary"
-          size="lg"
-          fullWidth
-          icon={<LogoutIcon />}
-          className="side-logout"
-          onClick={onLogout}
-        >
-          Cerrar Sesión
-        </BaseButton>
-      </button>
+      <BaseButton
+        variant="secondary"
+        size="lg"
+        fullWidth
+        icon={<LogoutIcon />}
+        className="side-logout"
+        onClick={onLogout}
+      >
+        Cerrar Sesión
+      </BaseButton>
     </nav>
   );
 }

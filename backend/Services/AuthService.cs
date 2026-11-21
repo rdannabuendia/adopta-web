@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Adopta.Api.Data;          
+using Adopta.Api.Data;
 using Adopta.Api.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,16 +10,12 @@ namespace Adopta.Api.Services;
 
 public interface IAuthService
 {
-    /// <returns>null si las credenciales son inválidas</returns>
-    /// <exception cref="UnauthorizedAccessException">
-    /// Credenciales correctas pero la cuenta está Inactiva o Bloqueada.
-    /// </exception>
     Task<LoginResponseDto?> LoginAsync(LoginRequestDto request);
 }
 
 public class AuthService : IAuthService
 {
-    private readonly AdoptaDbContext _db; 
+    private readonly AdoptaDbContext _db;
     private readonly IConfiguration _config;
 
     public AuthService(AdoptaDbContext db, IConfiguration config)
@@ -46,10 +42,13 @@ public class AuthService : IAuthService
                     ? "Tu cuenta está bloqueada. Contacta al administrador."
                     : "Tu cuenta está inactiva. Contacta al administrador.");
 
-        var nombreCompleto = $"{usuario.Nombre} {usuario.ApellidoPaterno}".Trim();
         var rol = usuario.IdRolNavigation.Nombre;
-        var (token, expiracion) = GenerarToken(usuario.IdUsuario, usuario.Correo, nombreCompleto, rol);
+        if (rol is not ("Administrador" or "Organizacion"))
+            throw new UnauthorizedAccessException(
+                "Esta plataforma es solo para organizaciones y administradores. Usa la aplicación móvil.");
 
+        var nombreCompleto = $"{usuario.Nombre} {usuario.ApellidoPaterno}".Trim();
+        var (token, expiracion) = GenerarToken(usuario.IdUsuario, usuario.Correo, nombreCompleto, rol);
         return new LoginResponseDto
         {
             Token = token,
@@ -59,7 +58,8 @@ public class AuthService : IAuthService
                 Id = usuario.IdUsuario,
                 Nombre = nombreCompleto,
                 Email = usuario.Correo,
-                Rol = rol
+                Rol = rol,
+                FotoUrl = PerfilService.UrlFoto(usuario.FotoPerfil)
             }
         };
     }
@@ -76,7 +76,7 @@ public class AuthService : IAuthService
             new Claim(JwtRegisteredClaimNames.Sub, id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, correo),
             new Claim(ClaimTypes.Name, nombre),
-            new Claim(ClaimTypes.Role, rol) 
+            new Claim(ClaimTypes.Role, rol)
         };
 
         var token = new JwtSecurityToken(
