@@ -39,6 +39,8 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<IOrganizacionService, OrganizacionService>();
 builder.Services.AddScoped<IPerfilService, PerfilService>();
+builder.Services.AddScoped<IOrganizacionAdminService, OrganizacionAdminService>();
+builder.Services.AddScoped<IMascotaService, MascotaService>();
 
 // CORS
 builder.Services.AddCors(o => o.AddPolicy("front", p => p

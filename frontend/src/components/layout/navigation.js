@@ -92,9 +92,11 @@ export function getVisibleNav(rol) {
 }
 
 export function getPageTitle(pathname, items) {
-  const links = items.flatMap((i) => (i.children ? i.children : [i]));
+  const links = items.flatMap((i) =>
+    i.children ? i.children.map((c) => ({ ...c, title: i.label })) : [{ ...i, title: i.label }]
+  );
   const match = links
     .filter((l) => matchesPath(pathname, l.to))
     .sort((a, b) => b.to.length - a.to.length)[0];
-  return match?.label ?? "Adopta+";
+  return match?.title ?? "Adopta+";
 }

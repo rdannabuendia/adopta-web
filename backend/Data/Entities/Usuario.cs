@@ -32,6 +32,8 @@ public partial class Usuario
 
     public virtual ICollection<ArchivosRequisito> ArchivosRequisitos { get; set; } = new List<ArchivosRequisito>();
 
+    public virtual ICollection<BajasOrganizacion> BajasOrganizacions { get; set; } = new List<BajasOrganizacion>();
+
     public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 
     public virtual ICollection<Favorito> Favoritos { get; set; } = new List<Favorito>();

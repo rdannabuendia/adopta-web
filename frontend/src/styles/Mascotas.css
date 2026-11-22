@@ -1,0 +1,68 @@
+.mascotas-alert { margin-bottom: 16px; }
+.mascotas-state { color: #6b7f87; font-size: 0.9rem; }
+
+/* ---------- Formulario ---------- */
+.pet-form__layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.pet-form__photos { position: sticky; top: 16px; }
+.pet-form__fields { display: flex; flex-direction: column; gap: 26px; min-width: 0; }
+
+.pet-form__section { display: flex; flex-direction: column; gap: 14px; }
+.pet-form__section h2 {
+  margin: 0 0 2px; padding-bottom: 8px;
+  font-size: 1rem; font-weight: 700; color: #1d3f5c;
+  border-bottom: 1px solid #e3e8ea;
+}
+.pet-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+.pet-form__grid--3 { grid-template-columns: repeat(4, 1fr); }
+.pet-form__checks { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+
+.pet-form__actions {
+  display: flex; justify-content: center; gap: 12px;
+  margin-top: 28px; padding-top: 20px; border-top: 1px solid #e3e8ea;
+}
+.pet-form__actions--left { justify-content: flex-start; margin-top: 12px; border-top: 0; padding-top: 0; }
+.pet-form__actions .base-btn { min-width: 160px; }
+
+/* ---------- Detalle / estatus ---------- */
+.pet-detail__grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 360px) 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-top: 16px;
+}
+.pet-detail__info { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.pet-detail__info h3 { margin: 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #1d3f5c; }
+.pet-detail__name { margin: 0; font-size: 1.8rem; font-weight: 800; color: #1d3f5c; }
+.pet-detail__summary { margin: -8px 0 0; color: #6b7f87; }
+.pet-detail__text { margin: 0; line-height: 1.6; color: #4a5b67; white-space: pre-line; overflow-wrap: anywhere; }
+.pet-detail__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.pet-detail__flags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.pet-detail__actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  margin-top: 28px; padding-top: 20px; border-top: 1px solid #e3e8ea;
+}
+.pet-detail__hint { font-size: 0.8rem; color: #6b7f87; font-style: italic; }
+
+.pet-flag { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #9aa8b0; }
+.pet-flag.is-ok { color: #2f9d78; }
+
+.pet-status__photo { aspect-ratio: 1; overflow: hidden; border-radius: 14px; background: #ebf7f5; }
+.pet-status__photo img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (max-width: 980px) {
+  .pet-form__layout,
+  .pet-detail__grid { grid-template-columns: 1fr; }
+  .pet-form__photos { position: static; }
+  .pet-form__grid--3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .pet-form__grid,
+  .pet-form__grid--3 { grid-template-columns: 1fr; }
+  .pet-form__actions { flex-direction: column; }
+}

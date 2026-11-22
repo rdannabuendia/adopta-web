@@ -31,5 +31,5 @@ public partial class VistaReportesSeguimiento
 
     public int IdAdoptante { get; set; }
 
-    public string? Adoptante { get; set; }
+    public string Adoptante { get; set; } = null!;
 }

@@ -1,0 +1,24 @@
+.org-alert { margin-bottom: 16px; }
+.org-state { color: #6b7f87; font-size: 0.85rem; }
+
+.org-form__title {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1d3f5c;
+}
+.org-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 28px;
+}
+.org-form__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+.org-form__actions .base-btn { min-width: 150px; }
+
+@media (max-width: 720px) {
+  .org-form__grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,22 @@
+.inline-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.inline-filters__search {
+    flex: 1 1 260px;
+    min-width: 220px;
+}
+
+.inline-filters__select {
+    flex: 0 0 170px;
+}
+
+@media (max-width: 640px) {
+    .inline-filters__select {
+        flex: 1 1 calc(50% - 6px);
+    }
+}

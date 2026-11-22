@@ -24,8 +24,8 @@ export default function AppLayout() {
   };
 
   const section = getPageTitle(pathname, items);
-  const title =
-    user?.rol === ROLES.ORG ? `${section} · ${user.nombre}` : section;
+  const sufijo = user?.rol === ROLES.ORG ? user.nombre : "Admin";
+  const title = `${section} · ${sufijo}`;
 
   return (
     <div className="app-shell">

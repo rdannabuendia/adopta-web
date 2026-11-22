@@ -10,6 +10,16 @@ import ProtectedRoute from "./modules/auth/components/ProtectedRoute";
 import DashboardPage from "./modules/dashboard/pages/DashboardPage";
 import PerfilPage from "./modules/auth/pages/PerfilPage";
 import EditarPerfilPage from "./modules/auth/pages/EditarPerfilPage";
+import OrganizacionesPage from "./modules/organizaciones/pages/OrganizacionesPage";
+import OrganizacionDetallePage from "./modules/organizaciones/pages/OrganizacionDetallePage";
+import OrganizacionBajaPage from "./modules/organizaciones/pages/OrganizacionBajaPage";
+import SolicitudesRegistroPage from "./modules/organizaciones/pages/SolicitudesRegistroPage";
+import SolicitudDetallePage from "./modules/organizaciones/pages/SolicitudDetallePage";
+import MascotasHomePage from "./modules/mascotas/pages/MascotasHomePage";
+import MascotaFormPage from "./modules/mascotas/pages/MascotaFormPage";
+import MascotaDetallePage from "./modules/mascotas/pages/MascotaDetallePage";
+import MascotaEstatusPage from "./modules/mascotas/pages/MascotaEstatusPage";
+import MascotasOrganizacionPage from "./modules/mascotas/pages/MascotasOrganizacionPage";
 
 const ADMIN = ["Administrador"];
 const ORG = ["Organizacion"];
@@ -60,30 +70,33 @@ export default function App() {
                 }
               />
 
-              <Route
-                path="/organizaciones"
-                element={<PlaceholderPage title="Organizaciones" />}
-              />
+              <Route path="/organizaciones" element={<OrganizacionesPage />} />
               <Route
                 path="/organizaciones/solicitudes"
-                element={<PlaceholderPage title="Solicitudes de registro" />}
+                element={<SolicitudesRegistroPage />}
+              />
+              <Route
+                path="/organizaciones/solicitudes/:id"
+                element={<SolicitudDetallePage />}
               />
               <Route
                 path="/organizaciones/:id"
-                element={<PlaceholderPage title="Detalle de organización" />}
+                element={<OrganizacionDetallePage />}
+              />
+              <Route
+                path="/organizaciones/:id/baja"
+                element={<OrganizacionBajaPage />}
+              />
+              <Route
+                path="/mascotas/organizacion/:idOrganizacion"
+                element={<MascotasOrganizacionPage />}
               />
             </Route>
 
             {/* Administrador y organización */}
             <Route element={<ProtectedRoute roles={ADMIN_ORG} />}>
-              <Route
-                path="/mascotas"
-                element={<PlaceholderPage title="Mascotas" />}
-              />
-              <Route
-                path="/mascotas/:id"
-                element={<PlaceholderPage title="Detalle de mascota" />}
-              />
+              <Route path="/mascotas" element={<MascotasHomePage />} />
+              <Route path="/mascotas/:id" element={<MascotaDetallePage />} />
 
               <Route
                 path="/seguimiento"
@@ -104,19 +117,17 @@ export default function App() {
               />
               <Route
                 path="/solicitudes/:id"
-                element={<PlaceholderPage title="Detalle de solicitud" />}
+                element={<SolicitudDetallePage />}
               />
             </Route>
 
             {/* Solo organización */}
             <Route element={<ProtectedRoute roles={ORG} />}>
+              <Route path="/mascotas/nueva" element={<MascotaFormPage />} />
+              <Route path="/mascotas/:id/editar" element={<MascotaFormPage />} />
               <Route
-                path="/mascotas/nueva"
-                element={<PlaceholderPage title="Registrar mascota" />}
-              />
-              <Route
-                path="/mascotas/:id/editar"
-                element={<PlaceholderPage title="Editar mascota" />}
+                path="/mascotas/:id/estatus"
+                element={<MascotaEstatusPage />}
               />
             </Route>
           </Route>

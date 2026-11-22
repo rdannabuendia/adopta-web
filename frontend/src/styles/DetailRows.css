@@ -1,0 +1,37 @@
+.detail-rows {
+    margin: 0;
+}
+
+.detail-rows__row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid #e3e8ea;
+}
+
+.detail-rows__row dt {
+    font-size: 0.8rem;
+    color: #6b7f87;
+}
+
+.detail-rows__row dd {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1d3f5c;
+    overflow-wrap: anywhere;
+}
+
+.detail-rows__empty {
+    font-weight: 400;
+    font-style: italic;
+    color: #8a98a3;
+}
+
+@media (max-width: 560px) {
+    .detail-rows__row {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+}

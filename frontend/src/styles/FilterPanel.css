@@ -1,0 +1,58 @@
+.filter-panel {
+    margin-bottom: 20px;
+}
+
+.filter-panel__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.filter-panel__head h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1d3f5c;
+}
+
+.filter-panel__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 28px;
+}
+
+.filter-panel__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.filter-panel__actions .base-btn {
+    min-width: 130px;
+}
+
+.filter-panel .base-input__label {
+    padding-left: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a5b67;
+}
+
+.filter-panel .base-input__field {
+    height: 40px;
+    padding: 0 12px;
+    border-color: #d0d7da;
+    border-radius: 8px;
+}
+
+.filter-panel .base-input__control {
+    font-size: 0.88rem;
+}
+
+@media (max-width: 640px) {
+    .filter-panel__grid {
+        grid-template-columns: 1fr;
+    }
+}

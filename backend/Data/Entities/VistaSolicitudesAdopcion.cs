@@ -15,7 +15,7 @@ public partial class VistaSolicitudesAdopcion
 
     public int IdAdoptante { get; set; }
 
-    public string? Adoptante { get; set; }
+    public string Adoptante { get; set; } = null!;
 
     public string Correo { get; set; } = null!;
 

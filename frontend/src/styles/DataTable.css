@@ -1,0 +1,65 @@
+.data-table-card {
+    overflow: hidden;
+}
+
+.data-table__scroll {
+    overflow-x: auto;
+    padding: 8px 20px 0;
+}
+
+.data-table {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.data-table th {
+    padding: 14px 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: left;
+    color: #5b6b78;
+    border-bottom: 1px solid #d9dfe2;
+}
+
+.data-table td {
+    padding: 12px 8px;
+    color: #5b6b78;
+    border-bottom: 1px solid #e8edef;
+    vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.data-table tbody.is-loading {
+    opacity: 0.55;
+    transition: opacity 0.15s;
+}
+
+.data-table__state {
+    margin: 0;
+    padding: 40px 20px;
+    text-align: center;
+    color: #5b6b78;
+}
+
+.data-table__empty.empty-state {
+    border: 0;
+    background: none;
+}
+
+.data-table__footer {
+    padding: 4px 20px 16px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

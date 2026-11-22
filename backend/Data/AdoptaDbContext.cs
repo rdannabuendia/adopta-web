@@ -7,6 +7,10 @@ namespace Adopta.Api.Data;
 
 public partial class AdoptaDbContext : DbContext
 {
+    public AdoptaDbContext()
+    {
+    }
+
     public AdoptaDbContext(DbContextOptions<AdoptaDbContext> options)
         : base(options)
     {
@@ -15,6 +19,8 @@ public partial class AdoptaDbContext : DbContext
     public virtual DbSet<Adopcione> Adopciones { get; set; }
 
     public virtual DbSet<ArchivosRequisito> ArchivosRequisitos { get; set; }
+
+    public virtual DbSet<BajasOrganizacion> BajasOrganizacions { get; set; }
 
     public virtual DbSet<Comentario> Comentarios { get; set; }
 
@@ -43,6 +49,8 @@ public partial class AdoptaDbContext : DbContext
     public virtual DbSet<LikesPublicacion> LikesPublicacions { get; set; }
 
     public virtual DbSet<Mascota> Mascotas { get; set; }
+
+    public virtual DbSet<MotivosBaja> MotivosBajas { get; set; }
 
     public virtual DbSet<MotivosDevolucion> MotivosDevolucions { get; set; }
 
@@ -79,6 +87,10 @@ public partial class AdoptaDbContext : DbContext
     public virtual DbSet<VistaReportesSeguimiento> VistaReportesSeguimientos { get; set; }
 
     public virtual DbSet<VistaSolicitudesAdopcion> VistaSolicitudesAdopcions { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySQL("Server=adopta.mysql.database.azure.com;Port=3306;Database=adopta_db;User=adminadopta;Password=Adopta1234#;SslMode=Required;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -166,6 +178,49 @@ public partial class AdoptaDbContext : DbContext
                 .HasForeignKey(d => d.IdUsuarioCarga)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_archivo_usuario");
+        });
+
+        modelBuilder.Entity<BajasOrganizacion>(entity =>
+        {
+            entity.HasKey(e => e.IdBaja).HasName("PRIMARY");
+
+            entity.ToTable("bajas_organizacion");
+
+            entity.HasIndex(e => e.IdUsuarioAdmin, "fk_baja_admin");
+
+            entity.HasIndex(e => e.IdMotivoBaja, "fk_baja_motivo");
+
+            entity.HasIndex(e => new { e.IdOrganizacion, e.FechaRegistro }, "idx_baja_organizacion");
+
+            entity.Property(e => e.IdBaja).HasColumnName("id_baja");
+            entity.Property(e => e.Descripcion)
+                .HasColumnType("text")
+                .HasColumnName("descripcion");
+            entity.Property(e => e.FechaRegistro)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_registro");
+            entity.Property(e => e.FechaRevision)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_revision");
+            entity.Property(e => e.IdMotivoBaja).HasColumnName("id_motivo_baja");
+            entity.Property(e => e.IdOrganizacion).HasColumnName("id_organizacion");
+            entity.Property(e => e.IdUsuarioAdmin).HasColumnName("id_usuario_admin");
+
+            entity.HasOne(d => d.IdMotivoBajaNavigation).WithMany(p => p.BajasOrganizacions)
+                .HasForeignKey(d => d.IdMotivoBaja)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_baja_motivo");
+
+            entity.HasOne(d => d.IdOrganizacionNavigation).WithMany(p => p.BajasOrganizacions)
+                .HasForeignKey(d => d.IdOrganizacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_baja_organizacion");
+
+            entity.HasOne(d => d.IdUsuarioAdminNavigation).WithMany(p => p.BajasOrganizacions)
+                .HasForeignKey(d => d.IdUsuarioAdmin)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_baja_admin");
         });
 
         modelBuilder.Entity<Comentario>(entity =>
@@ -622,6 +677,20 @@ public partial class AdoptaDbContext : DbContext
                 .HasConstraintName("fk_mascota_organizacion");
         });
 
+        modelBuilder.Entity<MotivosBaja>(entity =>
+        {
+            entity.HasKey(e => e.IdMotivoBaja).HasName("PRIMARY");
+
+            entity.ToTable("motivos_baja");
+
+            entity.HasIndex(e => e.Nombre, "nombre").IsUnique();
+
+            entity.Property(e => e.IdMotivoBaja).HasColumnName("id_motivo_baja");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(100)
+                .HasColumnName("nombre");
+        });
+
         modelBuilder.Entity<MotivosDevolucion>(entity =>
         {
             entity.HasKey(e => e.IdMotivo).HasName("PRIMARY");
@@ -702,11 +771,20 @@ public partial class AdoptaDbContext : DbContext
                 .HasDefaultValueSql("'Pendiente'")
                 .HasColumnType("enum('Pendiente','Activa','Inactiva')")
                 .HasColumnName("estado");
+            entity.Property(e => e.Facebook)
+                .HasMaxLength(255)
+                .HasColumnName("facebook");
             entity.Property(e => e.FechaRegistro)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_registro");
+            entity.Property(e => e.HorarioAtencion)
+                .HasMaxLength(120)
+                .HasColumnName("horario_atencion");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            entity.Property(e => e.Instagram)
+                .HasMaxLength(255)
+                .HasColumnName("instagram");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(120)
                 .HasColumnName("nombre");
@@ -719,6 +797,9 @@ public partial class AdoptaDbContext : DbContext
             entity.Property(e => e.TipoOrganizacion)
                 .HasMaxLength(60)
                 .HasColumnName("tipo_organizacion");
+            entity.Property(e => e.Youtube)
+                .HasMaxLength(255)
+                .HasColumnName("youtube");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithOne(p => p.Organizacione)
                 .HasForeignKey<Organizacione>(d => d.IdUsuario)
@@ -1241,6 +1322,7 @@ public partial class AdoptaDbContext : DbContext
                 .HasColumnName("adaptacion");
             entity.Property(e => e.Adoptante)
                 .HasMaxLength(141)
+                .HasDefaultValueSql("''")
                 .HasColumnName("adoptante");
             entity.Property(e => e.Alimentacion)
                 .HasColumnType("text")
@@ -1279,6 +1361,7 @@ public partial class AdoptaDbContext : DbContext
 
             entity.Property(e => e.Adoptante)
                 .HasMaxLength(141)
+                .HasDefaultValueSql("''")
                 .HasColumnName("adoptante");
             entity.Property(e => e.Correo)
                 .HasMaxLength(120)

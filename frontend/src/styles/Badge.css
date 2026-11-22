@@ -47,3 +47,10 @@
     background: #fdecea;
     border-color: #f5c6c0;
 }
+
+.badge--sm {
+    padding: 4px 16px;
+    gap: 6px;
+    font-size: 0.75rem;
+    border-radius: 999px;
+}
