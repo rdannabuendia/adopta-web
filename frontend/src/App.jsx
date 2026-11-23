@@ -5,7 +5,6 @@ import ForgotPasswordPage from "./modules/auth/pages/ForgotPasswordPage";
 import ResetPasswordPage from "./modules/auth/pages/ResetPasswordPage";
 import RegistroOrganizacionPage from "./modules/auth/pages/RegistroOrganizacionPage";
 import AppLayout from "./components/layout/AppLayout";
-import PlaceholderPage from "./components/layout/PlaceholderPage";
 import ProtectedRoute from "./modules/auth/components/ProtectedRoute";
 import DashboardPage from "./modules/dashboard/pages/DashboardPage";
 import PerfilPage from "./modules/auth/pages/PerfilPage";
@@ -20,6 +19,20 @@ import MascotaFormPage from "./modules/mascotas/pages/MascotaFormPage";
 import MascotaDetallePage from "./modules/mascotas/pages/MascotaDetallePage";
 import MascotaEstatusPage from "./modules/mascotas/pages/MascotaEstatusPage";
 import MascotasOrganizacionPage from "./modules/mascotas/pages/MascotasOrganizacionPage";
+import SeguimientoListaPage from "./modules/seguimiento/pages/SeguimientoListaPage";
+import SeguimientoDetallePage from "./modules/seguimiento/pages/SeguimientoDetallePage";
+import SeguimientoActualizarPage from "./modules/seguimiento/pages/SeguimientoActualizarPage";
+import DevolucionesListaPage from "./modules/seguimiento/pages/DevolucionesListaPage";
+import DevolucionDetallePage from "./modules/seguimiento/pages/DevolucionDetallePage";
+import PanelGeneralPage from "./modules/reportes/pages/PanelGeneralPage";
+import ReporteAdopcionesPage from "./modules/reportes/pages/ReporteAdopcionesPage";
+import ReporteSolicitudesPage from "./modules/reportes/pages/ReporteSolicitudesPage";
+import ReporteMascotasPage from "./modules/reportes/pages/ReporteMascotasPage";
+import ExportarReportePage from "./modules/reportes/pages/ExportarReportePage";
+import SolicitudesAdopcionListaPage from "./modules/solicitudes/pages/SolicitudesAdopcionListaPage";
+import SolicitudAdopcionDetallePage from "./modules/solicitudes/pages/SolicitudAdopcionDetallePage";
+import SolicitudAdopcionResolverPage from "./modules/solicitudes/pages/SolicitudAdopcionResolverPage";
+import SolicitudAdopcionInfoPage from "./modules/solicitudes/pages/SolicitudAdopcionInfoPage";
 
 const ADMIN = ["Administrador"];
 const ORG = ["Organizacion"];
@@ -45,30 +58,11 @@ export default function App() {
 
             {/* Solo administrador */}
             <Route element={<ProtectedRoute roles={ADMIN} />}>
-              <Route
-                path="/reportes"
-                element={
-                  <PlaceholderPage title="Panel de estadísticas generales" />
-                }
-              />
-              <Route
-                path="/reportes/adopciones"
-                element={<PlaceholderPage title="Reporte de adopciones" />}
-              />
-              <Route
-                path="/reportes/solicitudes"
-                element={<PlaceholderPage title="Reporte de solicitudes" />}
-              />
-              <Route
-                path="/reportes/mascotas"
-                element={<PlaceholderPage title="Estadísticas de mascotas" />}
-              />
-              <Route
-                path="/reportes/exportar"
-                element={
-                  <PlaceholderPage title="Generar y exportar reportes" />
-                }
-              />
+              <Route path="/reportes" element={<PanelGeneralPage />} />
+              <Route path="/reportes/adopciones" element={<ReporteAdopcionesPage />} />
+              <Route path="/reportes/solicitudes" element={<ReporteSolicitudesPage />} />
+              <Route path="/reportes/mascotas" element={<ReporteMascotasPage />} />
+              <Route path="/reportes/exportar" element={<ExportarReportePage />} />
 
               <Route path="/organizaciones" element={<OrganizacionesPage />} />
               <Route
@@ -98,27 +92,17 @@ export default function App() {
               <Route path="/mascotas" element={<MascotasHomePage />} />
               <Route path="/mascotas/:id" element={<MascotaDetallePage />} />
 
-              <Route
-                path="/seguimiento"
-                element={<PlaceholderPage title="Gestión de seguimiento" />}
-              />
+              {/* Seguimiento: la organización gestiona; el admin solo consulta */}
+              <Route path="/seguimiento" element={<SeguimientoListaPage />} />
               <Route
                 path="/seguimiento/devoluciones"
-                element={<PlaceholderPage title="Solicitudes de devolución" />}
+                element={<DevolucionesListaPage />}
               />
               <Route
-                path="/seguimiento/:id"
-                element={<PlaceholderPage title="Detalle de seguimiento" />}
+                path="/seguimiento/devoluciones/:id"
+                element={<DevolucionDetallePage />}
               />
-
-              <Route
-                path="/solicitudes"
-                element={<PlaceholderPage title="Solicitudes de adopción" />}
-              />
-              <Route
-                path="/solicitudes/:id"
-                element={<SolicitudDetallePage />}
-              />
+              <Route path="/seguimiento/:id" element={<SeguimientoDetallePage />} />
             </Route>
 
             {/* Solo organización */}
@@ -128,6 +112,22 @@ export default function App() {
               <Route
                 path="/mascotas/:id/estatus"
                 element={<MascotaEstatusPage />}
+              />
+              <Route
+                path="/seguimiento/:id/actualizar"
+                element={<SeguimientoActualizarPage />}
+              />
+
+              {/* Solicitudes de adopción: las gestiona la organización dueña de la mascota */}
+              <Route path="/solicitudes" element={<SolicitudesAdopcionListaPage />} />
+              <Route path="/solicitudes/:id" element={<SolicitudAdopcionDetallePage />} />
+              <Route
+                path="/solicitudes/:id/informacion"
+                element={<SolicitudAdopcionInfoPage />}
+              />
+              <Route
+                path="/solicitudes/:id/resolver"
+                element={<SolicitudAdopcionResolverPage />}
               />
             </Route>
           </Route>

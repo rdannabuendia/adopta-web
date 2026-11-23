@@ -1,0 +1,86 @@
+.seg-alert { margin-bottom: 16px; }
+.seg-state { color: #6b7f87; font-size: 0.9rem; }
+
+/* ---------- Detalle de seguimiento ---------- */
+.seg-revision-vencida { margin-left: 8px; }
+.seg-reports__title {
+  margin: 28px 0 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1d3f5c;
+}
+.seg-reports__hint { margin: 0 0 8px; font-size: 0.8rem; color: #6b7f87; }
+
+.report-card {
+  padding: 16px 0 6px;
+  border-top: 1px solid #e3e8ea;
+}
+.report-card__date {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1f7f8f;
+}
+.report-card__empty { margin: 10px 0 0; font-size: 0.8rem; font-style: italic; color: #8a98a3; }
+.report-card .detail-rows__row:last-child { border-bottom: 0; }
+.report-card__photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+.report-card__photos img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #e3e8ea;
+}
+
+/* ---------- Actualización de adaptación ---------- */
+.seg-update { max-width: 640px; }
+.seg-update__pet { display: flex; align-items: center; gap: 14px; margin: 16px 0 20px; }
+.seg-update__pet h2 { margin: 0; font-size: 1.15rem; color: #1d3f5c; }
+.seg-update__pet p { margin: 2px 0 0; font-size: 0.85rem; color: #6b7f87; }
+.seg-update__current { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; font-size: 0.85rem; color: #6b7f87; }
+.seg-update__form { display: flex; flex-direction: column; gap: 16px; }
+.seg-update__actions { display: flex; gap: 12px; margin-top: 8px; }
+.seg-update__actions .base-btn { min-width: 160px; }
+
+/* ---------- Detalle de devolución ---------- */
+.dev-detail__title {
+  margin: 0 0 18px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1d3f5c;
+}
+.dev-detail__people {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 22px;
+}
+.dev-detail__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+}
+.dev-detail__motivos { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.dev-detail__resolution { margin-top: 18px; }
+.dev-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 26px;
+}
+.dev-detail__actions .base-btn { min-width: 160px; }
+.dev-confirm__text { margin: 0 0 14px; font-size: 0.9rem; color: #4d6470; }
+
+@media (max-width: 800px) {
+  .dev-detail__people,
+  .dev-detail__fields { grid-template-columns: 1fr; }
+  .dev-detail__actions { flex-direction: column; }
+}

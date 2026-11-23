@@ -41,6 +41,10 @@ builder.Services.AddScoped<IOrganizacionService, OrganizacionService>();
 builder.Services.AddScoped<IPerfilService, PerfilService>();
 builder.Services.AddScoped<IOrganizacionAdminService, OrganizacionAdminService>();
 builder.Services.AddScoped<IMascotaService, MascotaService>();
+builder.Services.AddScoped<ISeguimientoService, SeguimientoService>();
+builder.Services.AddScoped<ISolicitudAdopcionService, SolicitudAdopcionService>();
+builder.Services.AddScoped<IReportesService, ReportesService>();
+builder.Services.AddSingleton<IReporteExportService, ReporteExportService>();
 
 // CORS
 builder.Services.AddCors(o => o.AddPolicy("front", p => p
@@ -76,6 +80,25 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(uploadsRoot),
     RequestPath = "/uploads"
 });
+
+// Fotos de seguimiento que sube el adoptante desde la app móvil: si la app las guarda en otra carpeta
+var mobileRoot = cfg["Storage:MobileRoot"];
+if (!string.IsNullOrWhiteSpace(mobileRoot))
+{
+    var seguimientoDir = Path.Combine(Path.GetFullPath(mobileRoot, builder.Environment.ContentRootPath), "seguimiento");
+    if (Directory.Exists(seguimientoDir))
+    {
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(seguimientoDir),
+            RequestPath = "/uploads/seguimiento"
+        });
+    }
+    else
+    {
+        app.Logger.LogWarning("Storage:MobileRoot no tiene la carpeta 'seguimiento': {Dir}", seguimientoDir);
+    }
+}
 
 app.UseCors("front");
 app.UseAuthentication();

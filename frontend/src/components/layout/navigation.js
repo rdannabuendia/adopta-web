@@ -67,7 +67,7 @@ export const NAV_ITEMS = [
     label: "Solicitudes de adopción",
     to: "/solicitudes",
     icon: ClipboardIcon,
-    roles: ADMIN_ORG,
+    roles: [ROLES.ORG],
     description: "Revisa, resuelve y pide información adicional.",
   },
   {
