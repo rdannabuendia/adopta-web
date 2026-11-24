@@ -1,3 +1,5 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Adopta.Api.DTOs;
 using Adopta.Api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -7,55 +9,100 @@ namespace Adopta.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Administrador")]   // todo el módulo es solo para administradores
 public class OrganizacionesController : ControllerBase
 {
-    private readonly IOrganizacionService _service;
+    private readonly IOrganizacionService _registro;
+    private readonly IOrganizacionAdminService _admin;
 
-    public OrganizacionesController(IOrganizacionService service) => _service = service;
+    public OrganizacionesController(IOrganizacionService registro, IOrganizacionAdminService admin)
+    {
+        _registro = registro;
+        _admin = admin;
+    }
 
-    // POST /api/organizaciones/solicitud  
+    private int IdAdmin => int.Parse(
+        User.FindFirstValue(ClaimTypes.NameIdentifier)
+        ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+
+    private async Task<IActionResult> Ejecutar(Func<Task<IActionResult>> accion)
+    {
+        try { return await accion(); }
+        catch (NegocioException ex) { return StatusCode(ex.Status, new ErrorResponseDto { Mensaje = ex.Message }); }
+    }
+
+    // ---------- Público: solicitud de registro (formulario de la landing) ----------
     [HttpPost("solicitud")]
     [AllowAnonymous]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(20 * 1024 * 1024)]
-    public async Task<IActionResult> Solicitar([FromForm] SolicitudOrganizacionRequestDto request)
-    {
-        try
+    public Task<IActionResult> Solicitar([FromForm] SolicitudOrganizacionRequestDto request) =>
+        Ejecutar(async () =>
         {
-            var id = await _service.RegistrarSolicitudAsync(request);
+            var id = await _registro.RegistrarSolicitudAsync(request);
             return StatusCode(StatusCodes.Status201Created, new SolicitudOrganizacionResponseDto
             {
                 IdOrganizacion = id,
                 Mensaje = "Solicitud enviada. Te avisaremos por correo cuando sea revisada."
             });
-        }
-        catch (NegocioException ex)
+        });
+
+    // ---------- Listado ----------
+    [HttpGet]
+    public Task<IActionResult> Listar([FromQuery] OrganizacionesQueryDto query) =>
+        Ejecutar(async () => Ok(await _admin.ListarAsync(query)));
+
+    [HttpGet("ciudades")]
+    public Task<IActionResult> Ciudades() =>
+        Ejecutar(async () => Ok(await _admin.CiudadesAsync()));
+
+    [HttpGet("{id:int}")]
+    public Task<IActionResult> Detalle(int id) =>
+        Ejecutar(async () => Ok(await _admin.DetalleAsync(id)));
+
+    // ---------- Baja por incumplimiento ----------
+    [HttpGet("motivos-baja")]
+    public Task<IActionResult> MotivosBaja() =>
+        Ejecutar(async () => Ok(await _admin.MotivosBajaAsync()));
+
+    [HttpPost("{id:int}/baja")]
+    public Task<IActionResult> DarDeBaja(int id, [FromBody] BajaOrganizacionRequestDto request) =>
+        Ejecutar(async () =>
         {
-            return StatusCode(ex.Status, new ErrorResponseDto { Mensaje = ex.Message });
-        }
-    }
+            await _admin.DarDeBajaAsync(id, IdAdmin, request);
+            return Ok(new MensajeResponseDto { Mensaje = "La organización fue dada de baja." });
+        });
 
-    // GET /api/organizaciones/solicitudes?estado=Pendiente  (tabla del módulo de organizaciones)
+    // ---------- Solicitudes de registro ----------
     [HttpGet("solicitudes")]
-    [Authorize(Roles = "Administrador")]
-    public async Task<IActionResult> Solicitudes([FromQuery] string estado = "Pendiente")
-    {
-        if (estado is not ("Pendiente" or "Activa" or "Inactiva"))
-            return BadRequest(new ErrorResponseDto { Mensaje = "Estado no válido." });
+    public Task<IActionResult> Solicitudes([FromQuery] OrganizacionesQueryDto query) =>
+        Ejecutar(async () => Ok(await _admin.SolicitudesAsync(query)));
 
-        return Ok(await _service.ListarAsync(estado));
-    }
+    [HttpPost("{id:int}/aprobar")]
+    public Task<IActionResult> Aprobar(int id) =>
+        Ejecutar(async () =>
+        {
+            await _admin.AprobarAsync(id);
+            return Ok(new MensajeResponseDto { Mensaje = "Solicitud aprobada. Se envió el correo para crear la contraseña." });
+        });
 
-    // GET /api/organizaciones/documentos/{id}  (ver el documento para validarlo)
+    [HttpPost("{id:int}/rechazar")]
+    public Task<IActionResult> Rechazar(int id, [FromBody] RechazarSolicitudRequestDto request) =>
+        Ejecutar(async () =>
+        {
+            await _admin.RechazarAsync(id, request.Motivo);
+            return Ok(new MensajeResponseDto { Mensaje = "Solicitud rechazada. Se notificó al solicitante." });
+        });
+
+    // ---------- Documentos de la solicitud ----------
     [HttpGet("documentos/{idDocumento:int}")]
-    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Documento(int idDocumento)
     {
-        var doc = await _service.ObtenerDocumentoAsync(idDocumento);
+        var doc = await _registro.ObtenerDocumentoAsync(idDocumento);
         if (doc is null)
             return NotFound(new ErrorResponseDto { Mensaje = "Documento no encontrado." });
 
         Response.Headers["X-Content-Type-Options"] = "nosniff";
-        return PhysicalFile(doc.Value.Ruta, doc.Value.Mime); // inline: el navegador lo muestra
+        return PhysicalFile(doc.Value.Ruta, doc.Value.Mime);
     }
 }

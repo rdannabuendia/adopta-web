@@ -6,17 +6,21 @@ import HowItWorks from "../components/HowItWorks/HowItWorks";
 import Faq from "../components/Faq/Faq";
 import Contact from "../components/Contact/Contact";
 import Footer from "../components/Footer/Footer";
+import PetsCarousel from "../components/PetsCarousel/PetsCarousel"
+import Platforms from "../components/Platforms/Platforms"
 
 export default function LandingPage() {
   return (
     <div className="landing">
       <Navbar/>
       <Hero/>
-      <About/>
-      <HowItWorks/>
-      <Faq/>
-      <Contact/>
-      <Footer/>
+      <PetsCarousel />
+      <About />
+      <HowItWorks />
+      <Platforms />
+      <Faq />
+      <Contact />
+      <Footer />
     </div>
   );
 }

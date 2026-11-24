@@ -1,0 +1,124 @@
+.sol-alert { margin-bottom: 16px; }
+.sol-state { margin: 0; font-size: 0.9rem; color: #6b7f87; }
+.sol-section-title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1d3f5c;
+}
+.sol-quote {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #4d6470;
+  background: #f4f8f8;
+  border-left: 3px solid #6aa3a3;
+  border-radius: 0 10px 10px 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Detalle ---------- */
+.sol-detail { max-width: 1040px; margin-bottom: 20px; }
+.sol-detail__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+.sol-detail__main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-right: 32px;
+}
+.sol-detail__person {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.sol-detail__contact { display: flex; flex-direction: column; gap: 6px; min-width: 0; font-size: 0.9rem; color: #4d6470; }
+.sol-detail__contact h2 { margin: 0 0 2px; font-size: 1.4rem; color: #1d3f5c; }
+.sol-detail__contact a { color: #4d6470; overflow-wrap: anywhere; }
+.sol-detail__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-left: 32px;
+  border-left: 1px solid #e3e8ea;
+}
+.sol-detail__side-title { margin: 0; font-size: 1.15rem; font-weight: 700; text-align: center; color: #1d3f5c; }
+.sol-detail__side-actions { display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-top: 8px; }
+.sol-detail__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e3e8ea;
+}
+.sol-detail__footer .base-btn { min-width: 150px; }
+.sol-link { color: #1f7f8f; text-decoration: none; }
+.sol-link:hover { text-decoration: underline; }
+/* Datos del hogar en dos columnas para que la tarjeta no sea tan larga */
+.sol-extra .detail-rows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 40px;
+}
+.sol-extra__refs { margin-top: 22px; }
+@media (max-width: 760px) {
+  .sol-extra .detail-rows { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  .sol-detail__grid { grid-template-columns: 1fr; gap: 28px; }
+  .sol-detail__main { padding-right: 0; }
+  .sol-detail__side { padding-left: 0; border-left: 0; padding-top: 24px; border-top: 1px solid #e3e8ea; }
+  .sol-detail__side-title { text-align: left; }
+}
+
+/* ---------- Modal de documentos ---------- */
+.sol-docs-modal { max-width: 560px; }
+.sol-docs-modal .document-list { margin-top: 0; }
+.sol-docs-modal__pending { margin-top: 18px; }
+.sol-docs-modal__pending h3 { margin: 0 0 8px; font-size: 0.95rem; font-weight: 700; color: #1d3f5c; }
+.sol-docs-modal__pending ul { margin: 0; padding: 0; list-style: none; }
+.sol-docs-modal__pending li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e3e8ea;
+  font-size: 0.85rem;
+  color: #1d3f5c;
+}
+.sol-docs-modal__pending small { color: #6b7f87; }
+
+/* ---------- Resolución ---------- */
+.sol-resolve {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 24px;
+  align-items: start;
+  max-width: 1040px;
+}
+.sol-resolve__people { display: flex; flex-direction: column; gap: 16px; }
+.sol-resolve__more { display: inline-block; margin-top: 12px; font-size: 0.8rem; color: #1f7f8f; }
+.sol-resolve__form form { display: flex; flex-direction: column; gap: 20px; }
+.sol-resolve__effects ul { margin: 6px 0 0; padding-left: 18px; font-size: 0.85rem; line-height: 1.5; }
+@media (max-width: 900px) {
+  .sol-resolve { grid-template-columns: 1fr; }
+}
+
+/* ---------- Formularios ---------- */
+.sol-form-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.sol-form-actions .base-btn { min-width: 160px; }
+.sol-form-actions--center { justify-content: center; }
+
+/* ---------- Información adicional ---------- */
+.sol-info { max-width: 560px; margin: 0 auto; }
+.sol-info__title { margin: 0 0 8px; text-align: center; font-size: 1.2rem; font-weight: 800; color: #1d3f5c; }
+.sol-info__lead { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.5; color: #6b7f87; }
+.sol-info__context { margin: 0 0 20px; font-size: 0.85rem; color: #4d6470; }
+.sol-info__form { display: flex; flex-direction: column; gap: 20px; }

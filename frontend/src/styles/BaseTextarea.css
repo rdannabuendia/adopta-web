@@ -1,0 +1,23 @@
+.base-input__field--area {
+    height: auto;
+    align-items: flex-start;
+    padding: 10px 14px;
+}
+
+.base-input__control--area {
+    height: auto;
+    min-height: 96px;
+    resize: vertical;
+    line-height: 1.45;
+}
+
+.base-input__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.base-input__count {
+    font-size: 0.75rem;
+    color: #777;
+}

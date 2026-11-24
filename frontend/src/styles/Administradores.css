@@ -1,0 +1,47 @@
+.admin-alert { margin-bottom: 16px; }
+
+.admin-form__title {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1d3f5c;
+}
+
+.admin-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 28px;
+}
+
+.admin-form__grid > * { min-width: 0; }
+
+.admin-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.admin-form__actions .base-btn { min-width: 150px; }
+
+/* Estado + aviso de contraseña pendiente, uno bajo otro */
+.admin-status {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Botones de acción de la fila: se acomodan en varias líneas si no caben */
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+@media (max-width: 720px) {
+  .admin-form__grid { grid-template-columns: minmax(0, 1fr); }
+  .admin-form__actions { flex-direction: column; }
+  .admin-form__actions .base-btn { width: 100%; }
+}

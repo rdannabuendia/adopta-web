@@ -13,6 +13,7 @@ public interface IPasswordResetService
     Task SolicitarAsync(string email);
     Task<ValidateResetTokenResponseDto?> ValidarAsync(string token);
     Task<bool> RestablecerAsync(string token, string nuevaPassword);
+    Task<string> GenerarEnlaceAsync(int idUsuario, TimeSpan vigencia);
 }
 
 public class PasswordResetService : IPasswordResetService
@@ -43,7 +44,7 @@ public class PasswordResetService : IPasswordResetService
 
         var usuario = await _db.Usuarios
             .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo && u.Estado == "Activo");
-        if (usuario is null) return; 
+        if (usuario is null) return;
 
         var ahora = DateTime.UtcNow;
 
@@ -99,7 +100,6 @@ public class PasswordResetService : IPasswordResetService
         return new ValidateResetTokenResponseDto { EmailEnmascarado = Enmascarar(usuario.Correo) };
     }
 
-    // ---------- 3. Guardar nueva contraseña ----------
     public async Task<bool> RestablecerAsync(string token, string nuevaPassword)
     {
         var registro = await BuscarValidoAsync(token);
@@ -120,8 +120,6 @@ public class PasswordResetService : IPasswordResetService
         await _db.SaveChangesAsync();
         return true;
     }
-
-    // ---------- Helpers ----------
     private Task<TokensRecuperacion?> BuscarValidoAsync(string token)
     {
         var hash = Hash(token.Trim());
@@ -130,12 +128,41 @@ public class PasswordResetService : IPasswordResetService
             t.TokenHash == hash && !t.Usado && t.FechaExpiracion > ahora);
     }
 
+    // En PasswordResetService:
+    public async Task<string> GenerarEnlaceAsync(int idUsuario, TimeSpan vigencia)
+    {
+        var ahora = DateTime.UtcNow;
+
+        var pendientes = await _db.TokensRecuperacions
+            .Where(t => t.IdUsuario == idUsuario && !t.Usado)
+            .ToListAsync();
+        foreach (var p in pendientes) p.Usado = true;
+
+        var token = NuevoToken();
+        _db.TokensRecuperacions.Add(new TokensRecuperacion
+        {
+            IdUsuario = idUsuario,
+            TokenHash = Hash(token),
+            FechaCreacion = ahora,
+            FechaExpiracion = ahora.Add(vigencia),
+            Usado = false
+        });
+        await _db.SaveChangesAsync();
+
+        var baseUrl = _config["Frontend:BaseUrl"]!.TrimEnd('/');
+        var link = $"{baseUrl}/cambiar-password?token={Uri.EscapeDataString(token)}";
+
+        if (_env.IsDevelopment())
+            _logger.LogInformation("Enlace de activación (DEV) para el usuario {Id}: {Link}", idUsuario, link);
+
+        return link;
+    }
+
     private static string NuevoToken() => WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(32));
 
     private static string Hash(string token) =>
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token))).ToLowerInvariant();
 
-    /// <summary>juanperez564@gmail.com → ******564@gmail.com</summary>
     private static string Enmascarar(string correo)
     {
         var partes = correo.Split('@');
@@ -144,18 +171,11 @@ public class PasswordResetService : IPasswordResetService
         return "******" + local[^visibles..] + "@" + partes[1];
     }
 
-    private string ConstruirCorreo(string nombre, string link) => $"""
-        <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;color:#222">
-          <h2 style="color:#6aa3a3">Adopta+</h2>
-          <p>Hola {System.Net.WebUtility.HtmlEncode(nombre)},</p>
-          <p>Recibimos una solicitud para restablecer tu contraseña. Haz clic en el botón para crear una nueva:</p>
-          <p style="text-align:center;margin:28px 0">
-            <a href="{link}" style="background:#6aa3a3;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:bold">
-              Cambiar contraseña
-            </a>
-          </p>
-          <p style="font-size:13px;color:#666">El enlace vence en {ExpireMinutes} minutos y solo puede usarse una vez.
-          Si no lo solicitaste, ignora este correo.</p>
-        </div>
-        """;
+    private string ConstruirCorreo(string nombre, string link) => EmailPlantilla.Envolver(
+        "Restablece tu contraseña",
+        EmailPlantilla.Parrafo($"Hola <strong>{EmailPlantilla.Html(nombre)}</strong>,") +
+        EmailPlantilla.Parrafo("Recibimos una solicitud para restablecer la contraseña de tu cuenta. Haz clic en el botón para crear una nueva:") +
+        EmailPlantilla.Boton("Cambiar contraseña", link) +
+        EmailPlantilla.Nota($"El enlace vence en {ExpireMinutes} minutos y solo puede usarse una vez. Si no solicitaste este cambio, ignora este correo: tu contraseña seguirá siendo la misma."),
+        "Crea una nueva contraseña para tu cuenta de Adopta+");
 }

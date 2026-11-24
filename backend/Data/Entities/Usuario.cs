@@ -30,7 +30,11 @@ public partial class Usuario
 
     public string Estado { get; set; } = null!;
 
+    public bool DebeCambiarPassword { get; set; }
+
     public virtual ICollection<ArchivosRequisito> ArchivosRequisitos { get; set; } = new List<ArchivosRequisito>();
+
+    public virtual ICollection<BajasOrganizacion> BajasOrganizacions { get; set; } = new List<BajasOrganizacion>();
 
     public virtual ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 
@@ -59,4 +63,6 @@ public partial class Usuario
     public virtual ICollection<SolicitudesDevolucion> SolicitudesDevolucions { get; set; } = new List<SolicitudesDevolucion>();
 
     public virtual ICollection<TokensRecuperacion> TokensRecuperacions { get; set; } = new List<TokensRecuperacion>();
+
+    public virtual VerificacionesCorreo? VerificacionesCorreo { get; set; }
 }

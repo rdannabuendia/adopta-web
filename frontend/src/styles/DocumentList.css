@@ -1,0 +1,25 @@
+.document-list { margin-top: 24px; }
+.document-list h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1d3f5c;
+}
+.document-list ul { list-style: none; margin: 0; padding: 0; }
+.document-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e3e8ea;
+}
+.document-list li span { display: flex; flex-direction: column; min-width: 0; }
+.document-list strong { font-size: 0.85rem; color: #1d3f5c; }
+.document-list small {
+  font-size: 0.75rem;
+  color: #6b7f87;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

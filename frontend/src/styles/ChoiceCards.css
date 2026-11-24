@@ -1,0 +1,56 @@
+.choice-cards { margin: 0; padding: 0; border: 0; min-width: 0; }
+.choice-cards__legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1d3f5c;
+}
+.choice-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.choice-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  background: #fff;
+  border: 1.5px solid #d9dfe2;
+  border-radius: 12px;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.choice-card:hover { border-color: #b7c4c9; }
+/* El radio real queda accesible por teclado pero oculto visualmente */
+.choice-card input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.choice-card:has(input:focus-visible) { outline: 2px solid #1f7f8f; outline-offset: 2px; }
+.choice-card__icon { display: inline-flex; flex-shrink: 0; margin-top: 1px; }
+.choice-card__icon svg { width: 22px; height: 22px; }
+.choice-card__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.choice-card__text strong { font-size: 0.95rem; color: #1d3f5c; }
+.choice-card__text small { font-size: 0.78rem; line-height: 1.35; color: #6b7f87; }
+
+.choice-card--success .choice-card__icon { color: #1e6b55; }
+.choice-card--danger .choice-card__icon { color: #a93226; }
+.choice-card--teal .choice-card__icon { color: #1f7f8f; }
+
+.choice-card--success.is-selected { background: #e8f6f1; border-color: #1e6b55; box-shadow: 0 0 0 3px #bfe6d9; }
+.choice-card--danger.is-selected { background: #fdecea; border-color: #a93226; box-shadow: 0 0 0 3px #f5c6c0; }
+.choice-card--teal.is-selected { background: #e6f4f1; border-color: #1f7f8f; box-shadow: 0 0 0 3px #bfe0e0; }
+
+.choice-cards:disabled .choice-card { cursor: not-allowed; opacity: 0.6; }
+.choice-cards.has-error .choice-card:not(.is-selected) { border-color: #e0a29b; }
+.choice-cards__error { margin: 8px 0 0; font-size: 0.8rem; color: #a93226; }
+
+@media (max-width: 560px) {
+  .choice-cards__grid { grid-template-columns: 1fr; }
+}

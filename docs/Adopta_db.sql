@@ -85,6 +85,32 @@ CREATE TABLE documentos_organizacion (
  UNIQUE KEY uq_doc_org_tipo(id_organizacion,tipo_documento)
 ) ENGINE=InnoDB;
 
+CREATE TABLE motivos_baja (
+ id_motivo_baja INT AUTO_INCREMENT PRIMARY KEY,
+ nombre VARCHAR(100) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+INSERT INTO motivos_baja(nombre) VALUES
+('Incumplimiento en el seguimiento de adopciones'),
+('Información o documentos falsos'),
+('Maltrato o negligencia hacia los animales'),
+('Cobros indebidos por adopción'),
+('Inactividad prolongada'),
+('Otro');
+
+CREATE TABLE bajas_organizacion (
+ id_baja INT AUTO_INCREMENT PRIMARY KEY,
+ id_organizacion INT NOT NULL,
+ id_motivo_baja INT NOT NULL,
+ id_usuario_admin INT NOT NULL,
+ descripcion TEXT NOT NULL,
+ fecha_revision DATETIME NOT NULL,
+ fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_baja_organizacion FOREIGN KEY(id_organizacion) REFERENCES organizaciones(id_organizacion),
+ CONSTRAINT fk_baja_motivo FOREIGN KEY(id_motivo_baja) REFERENCES motivos_baja(id_motivo_baja),
+ CONSTRAINT fk_baja_admin FOREIGN KEY(id_usuario_admin) REFERENCES usuarios(id_usuario),
+ INDEX idx_baja_organizacion(id_organizacion, fecha_registro)
+) ENGINE=InnoDB;
+
 -- Enlaces de recuperación de contraseña (se guarda solo el hash SHA-256 del token, fechas en UTC)
 CREATE TABLE tokens_recuperacion (
  id_token INT AUTO_INCREMENT PRIMARY KEY,

@@ -27,9 +27,19 @@ public partial class Organizacione
 
     public string? SitioWeb { get; set; }
 
+    public string? HorarioAtencion { get; set; }
+
+    public string? Facebook { get; set; }
+
+    public string? Instagram { get; set; }
+
+    public string? Youtube { get; set; }
+
     public DateTime FechaRegistro { get; set; }
 
     public string Estado { get; set; } = null!;
+
+    public virtual ICollection<BajasOrganizacion> BajasOrganizacions { get; set; } = new List<BajasOrganizacion>();
 
     public virtual ICollection<DocumentosOrganizacion> DocumentosOrganizacions { get; set; } = new List<DocumentosOrganizacion>();
 

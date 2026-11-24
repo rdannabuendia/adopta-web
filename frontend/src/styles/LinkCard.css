@@ -1,0 +1,34 @@
+.link-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px;
+  color: #5b6b78;
+  font-size: 0.85rem;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid #d9dfe2;
+  border-radius: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.link-card:hover {
+  border-color: #6aa3a3;
+  box-shadow: 0 6px 18px rgba(106, 163, 163, 0.18);
+}
+
+.link-card:focus-visible { outline: 2px solid #6aa3a3; outline-offset: 2px; }
+
+.link-card__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 4px;
+  color: #1f7f8f;
+  background: #dff1ef;
+  border-radius: 10px;
+}
+
+.link-card__icon svg { width: 20px; height: 20px; }
+.link-card__title { font-size: 1rem; color: #1d3f5c; }

@@ -1,11 +1,11 @@
 import "./About.css";
-import iconInfo from "../../../../../public/icons/land-ing/escudo_landing.svg";
-import iconSeguro from "../../../../../public/icons/land-ing/corazon_landing.svg";
-import iconWeb from "../../../../../public/icons/land-ing/telefono_landing.svg";
-import iconSeguimiento from "../../../../../public/icons/land-ing/manos_landing.svg";
+import iconInfo from "/public/icons/land-ing/escudo_landing.svg";
+import iconSeguro from "/public/icons/land-ing/corazon_landing.svg";
+import iconWeb from "/icons/land-ing/telefono_landing.svg";
+import iconSeguimiento from "/icons/land-ing/manos_landing.svg";
 
 const HuellaLogo = ({ className = "" }) => (
-  <img src="../../../../../public/icons/huellas/huella_g.svg" alt="HuellaLogo" className={className} />
+  <img src="/icons/huellas/huella_g.svg" alt="HuellaLogo" className={className} />
 );
 
 const features = [

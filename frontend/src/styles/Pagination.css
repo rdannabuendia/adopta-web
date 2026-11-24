@@ -1,0 +1,17 @@
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid #e8edef;
+    font-size: 0.8rem;
+    color: #5b6b78;
+}
+
+.pagination__controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}

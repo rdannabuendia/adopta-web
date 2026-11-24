@@ -159,15 +159,16 @@
 }
 
 .footer__logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+  display: inline-block;
   margin-bottom: 18px;
-  font-size: 1.9rem;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  color: #fff;
+  line-height: 0;
   text-decoration: none;
+}
+
+.footer__logo img {
+  display: block;
+  height: 34px;   /* cambia este número para agrandar o achicar el logo */
+  width: auto;
 }
 
 .footer__logo span {

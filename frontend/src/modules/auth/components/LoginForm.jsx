@@ -39,8 +39,10 @@ export default function LoginForm() {
 
     setLoading(true);
     try {
-      await login({ email: values.email.trim(), password: values.password });
-      navigate("/dashboard"); 
+      const data = await login({ email: values.email.trim(), password: values.password });
+      // Contraseña temporal → primero debe crear la suya
+      const destino = data.usuario?.debeCambiarPassword ? "/primer-cambio-password" : "/inicio";
+      navigate(destino, { replace: true });
     } catch (err) {
       setServerError(err.message);
     } finally {
@@ -71,7 +73,10 @@ export default function LoginForm() {
       />
 
       <div className="login-form__forgot">
-        <Link to="/recuperar-password" className="login-form__link login-form__link--xs">
+        <Link
+          to="/recuperar-password"
+          className="login-form__link login-form__link--xs"
+        >
           ¿Olvidaste tu contraseña?
         </Link>
       </div>

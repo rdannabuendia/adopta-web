@@ -1,0 +1,34 @@
+.reportes-alert { margin-bottom: 16px; }
+.reportes-state { margin: 0; font-size: 0.9rem; color: #6b7f87; }
+
+/* Menú interno entre reportes */
+.reportes-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+.reportes-nav__link {
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #4d6470;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid #d9dfe2;
+  border-radius: 999px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.reportes-nav__link:hover { border-color: #6aa3a3; color: #1f7f8f; }
+.reportes-nav__link:focus-visible { outline: 2px solid #1f7f8f; outline-offset: 2px; }
+.reportes-nav__link.is-active { color: #fff; background: #6aa3a3; border-color: #6aa3a3; }
+.reportes-nav__link--export { margin-left: auto; }
+@media (max-width: 640px) { .reportes-nav__link--export { margin-left: 0; } }
+
+.reportes-chart { margin-bottom: 20px; }
+.reportes-chart__title { margin: 0 0 4px; font-size: 1.05rem; font-weight: 700; color: #1d3f5c; }
+
+.reportes-chart__note { margin: 0 0 20px; font-size: 0.8rem; color: #6b7f87; }
+
+/* Generar y exportar */
+.reportes-export { max-width: 860px; }
+.reportes-export__title { margin: 0 0 18px; font-size: 1.1rem; font-weight: 700; color: #1d3f5c; }
+.reportes-export__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; }
+.reportes-export__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.reportes-export__actions .base-btn { min-width: 170px; }
+@media (max-width: 640px) { .reportes-export__grid { grid-template-columns: 1fr; } }

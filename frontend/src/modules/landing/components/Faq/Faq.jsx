@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./Faq.css";
 import BaseButton from "../../../../components/ui/BaseButton";
 import gatito from "../../../../assets/img/image.png";
+import { scrollToSection } from "../../../../utils/scroll";
 
 const MaskIcon = ({ src, className = "" }) => (
   <span
@@ -169,7 +170,11 @@ export default function Faq() {
             })}
           </ul>
 
-          <a href="/contacto" className="faq__contact">
+          <a
+            href="#contacto"
+            className="faq__contact"
+            onClick={(e) => scrollToSection("contacto", e)}
+          >
             <span className="faq__contact-icon">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />

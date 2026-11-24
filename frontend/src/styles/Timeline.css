@@ -1,0 +1,47 @@
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.timeline__item {
+  position: relative;
+  display: flex;
+  gap: 14px;
+}
+/* Línea que une cada punto con el siguiente */
+.timeline__item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  bottom: -18px;
+  left: 8px;
+  width: 2px;
+  background: #6aa3a3;
+}
+.timeline__dot {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 3px solid #6aa3a3;
+  border-radius: 50%;
+  background: #fff;
+}
+.timeline__item.is-current .timeline__dot { background: #6aa3a3; }
+.timeline__content { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.timeline__content strong { font-size: 0.9rem; line-height: 1.2; color: #1d3f5c; }
+.timeline__content time { font-size: 0.78rem; color: #6b7f87; }
+.timeline__content p {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #4d6470;
+  overflow-wrap: anywhere;
+}
+.timeline__empty { margin: 0; font-size: 0.85rem; color: #6b7f87; }

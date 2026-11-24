@@ -1,0 +1,23 @@
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.icon-btn--sm { width: 28px; height: 28px; }
+.icon-btn--md { width: 36px; height: 36px; }
+.icon-btn--lg { width: 44px; height: 44px; }
+
+.icon-btn--ghost:hover { background: #f2f8f7; }
+
+.icon-btn--soft { color: #1f7f8f; background: #e6f4f1; }
+.icon-btn--soft:hover { background: #d6ece8; }
+
+.icon-btn:focus-visible { outline: 2px solid #6aa3a3; outline-offset: 2px; }
+.icon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
