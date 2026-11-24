@@ -1,10 +1,17 @@
 using Adopta.Api.Data;
 using Adopta.Api.Data.Entities;
 using Adopta.Api.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using static Adopta.Api.Services.ServiceHelpers;
 
 namespace Adopta.Api.Services;
+
+public record ArchivoSolicitud(string? Ruta, byte[]? Contenido, string Mime, string Nombre);
 
 public interface ISolicitudAdopcionService
 {
@@ -12,7 +19,7 @@ public interface ISolicitudAdopcionService
     Task<List<EstadoSolicitudDto>> EstadosAsync();
     Task<SolicitudDetalleDto> DetalleAsync(int idSolicitud, int idOrganizacion);
     Task<List<SolicitudRequisitoDto>> DocumentosAsync(int idSolicitud, int idOrganizacion);
-    Task<(string Ruta, string Mime, string Nombre)?> ObtenerArchivoAsync(int idArchivo, int idOrganizacion);
+    Task<ArchivoSolicitud?> ObtenerArchivoAsync(int idArchivo, int idOrganizacion);
 
     Task SolicitarInformacionAsync(int idSolicitud, int idOrganizacion, int idUsuario, SolicitarInformacionRequestDto dto);
     Task ResolverAsync(int idSolicitud, int idOrganizacion, int idUsuario, ResolverSolicitudRequestDto dto);
@@ -37,14 +44,16 @@ public class SolicitudAdopcionService : ISolicitudAdopcionService
     private readonly IConfiguration _config;
     private readonly IHostEnvironment _env;
     private readonly ILogger<SolicitudAdopcionService> _logger;
+    private readonly IHttpClientFactory _http;
 
     public SolicitudAdopcionService(AdoptaDbContext db, IConfiguration config, IHostEnvironment env,
-        ILogger<SolicitudAdopcionService> logger)
+        ILogger<SolicitudAdopcionService> logger, IHttpClientFactory http)
     {
         _db = db;
         _config = config;
         _env = env;
         _logger = logger;
+        _http = http;
     }
 
     private string StorageRoot => Path.Combine(_env.ContentRootPath, _config["Storage:Root"] ?? "Storage");
@@ -121,7 +130,6 @@ public class SolicitudAdopcionService : ISolicitudAdopcionService
             .ToListAsync();
 
     // =================== Detalle ===================
-
     public async Task<SolicitudDetalleDto> DetalleAsync(int idSolicitud, int idOrganizacion)
     {
         var r = await Solicitudes(idOrganizacion)
@@ -285,13 +293,14 @@ public class SolicitudAdopcionService : ISolicitudAdopcionService
         }).ToList();
     }
 
-    public async Task<(string Ruta, string Mime, string Nombre)?> ObtenerArchivoAsync(int idArchivo, int idOrganizacion)
+    public async Task<ArchivoSolicitud?> ObtenerArchivoAsync(int idArchivo, int idOrganizacion)
     {
         // Solo archivos de solicitudes de mascotas de la organización en sesión
         var a = await _db.ArchivosRequisitos.AsNoTracking()
             .Where(x => x.IdArchivo == idArchivo
                         && x.IdRequisitoNavigation.IdSolicitudNavigation.IdMascotaNavigation.IdOrganizacion == idOrganizacion)
-            .Select(x => new { x.RutaRelativa, x.MimeType, x.NombreOriginal })
+            .Select(x => new { x.RutaRelativa, x.MimeType, x.NombreOriginal,
+                IdAdoptante = x.IdRequisitoNavigation.IdSolicitudNavigation.IdAdoptante })
             .FirstOrDefaultAsync();
         if (a is null) return null;
 
@@ -303,14 +312,58 @@ public class SolicitudAdopcionService : ISolicitudAdopcionService
             var ruta = Path.GetFullPath(Path.Combine(raiz, relativa));
             intentos.Add(ruta);
 
-            // Protección contra path traversal
             if (!ruta.StartsWith(raiz + Path.DirectorySeparatorChar)) continue;
-            if (File.Exists(ruta)) return (ruta, a.MimeType, a.NombreOriginal);
+            if (File.Exists(ruta)) return new ArchivoSolicitud(ruta, null, a.MimeType, a.NombreOriginal);
         }
 
-        _logger.LogWarning("Archivo {Id} no encontrado en disco. Rutas probadas: {Rutas}", idArchivo, string.Join(" | ", intentos));
+        var remoto = await DescargarDeMovilAsync(idArchivo, a.IdAdoptante, a.MimeType, a.NombreOriginal);
+        if (remoto is not null) return remoto;
+
+        _logger.LogWarning("Archivo {Id} no encontrado en disco ni en la API móvil. Rutas probadas: {Rutas}", idArchivo, string.Join(" | ", intentos));
         return null;
     }
+
+    private async Task<ArchivoSolicitud?> DescargarDeMovilAsync(int idArchivo, int idAdoptante, string mime, string nombre)
+    {
+        var baseUrl = _config["Mobile:BaseUrl"]?.TrimEnd('/');
+        var secret = _config["Mobile:JwtSecret"];
+        if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(secret))
+            throw new NegocioException("Falta configurar Mobile:BaseUrl y Mobile:JwtSecret en la API web.", StatusCodes.Status502BadGateway);
+
+        try
+        {
+            // La API móvil solo entrega el documento a su dueño: se firma un token corto del adoptante
+            // con el mismo secreto JWT que usa la API móvil (sub = id_usuario, rol = Adoptante).
+            var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)), SecurityAlgorithms.HmacSha256);
+            var jwt = new JwtSecurityToken(
+                claims: new[] { new Claim("sub", idAdoptante.ToString()), new Claim("rol", "Adoptante") },
+                expires: DateTime.UtcNow.AddMinutes(2),
+                signingCredentials: creds);
+            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            var client = _http.CreateClient();
+            client.Timeout = TimeSpan.FromSeconds(30);
+            using var req = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/api/archivos/{idArchivo}");
+            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            using var resp = await client.SendAsync(req);
+            if (!resp.IsSuccessStatusCode)
+            {
+                var cuerpo = await resp.Content.ReadAsStringAsync();
+                _logger.LogWarning("API móvil respondió {Status} para el archivo {Id}: {Cuerpo}", (int)resp.StatusCode, idArchivo, cuerpo);
+                throw new NegocioException(
+                    $"La API móvil respondió {(int)resp.StatusCode} al pedir el archivo {idArchivo}: {cuerpo}",
+                    StatusCodes.Status502BadGateway);
+            }
+            return new ArchivoSolicitud(null, await resp.Content.ReadAsByteArrayAsync(), mime, nombre);
+        }
+        catch (NegocioException) { throw; }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "No se pudo descargar el archivo {Id} de la API móvil", idArchivo);
+            throw new NegocioException($"No se pudo conectar con la API móvil ({baseUrl}): {ex.Message}", StatusCodes.Status502BadGateway);
+        }
+    }
+
     private IEnumerable<string> RaicesDeArchivos()
     {
         yield return Path.GetFullPath(StorageRoot);
