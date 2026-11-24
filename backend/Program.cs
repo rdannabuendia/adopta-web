@@ -32,6 +32,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 
 // Servicios
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -103,6 +104,20 @@ if (!string.IsNullOrWhiteSpace(mobileRoot))
     {
         app.Logger.LogWarning("Storage:MobileRoot no tiene la carpeta 'seguimiento': {Dir}", seguimientoDir);
     }
+}
+
+var mobileBaseUrl = cfg["Mobile:BaseUrl"]?.TrimEnd('/');
+if (!string.IsNullOrWhiteSpace(mobileBaseUrl))
+{
+    app.Use(async (ctx, next) =>
+    {
+        if (HttpMethods.IsGet(ctx.Request.Method) && ctx.Request.Path.StartsWithSegments("/uploads"))
+        {
+            ctx.Response.Redirect($"{mobileBaseUrl}{ctx.Request.Path}{ctx.Request.QueryString}", permanent: false);
+            return;
+        }
+        await next();
+    });
 }
 
 app.UseCors("front");

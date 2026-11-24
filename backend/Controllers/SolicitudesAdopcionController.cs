@@ -7,10 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Adopta.Api.Controllers;
 
-/// <summary>
-/// Solicitudes de adopción de la organización en sesión: consulta, detalle, documentos,
-/// solicitud de información adicional y resolución (aceptar / rechazar).
-/// </summary>
 [ApiController]
 [Route("api/solicitudes")]
 [Authorize(Roles = "Organizacion")]
@@ -62,7 +58,9 @@ public class SolicitudesAdopcionController : ControllerBase
                 return NotFound(new ErrorResponseDto { Mensaje = "Documento no encontrado." });
 
             Response.Headers["X-Content-Type-Options"] = "nosniff";
-            return PhysicalFile(archivo.Value.Ruta, archivo.Value.Mime);
+            return archivo.Ruta is not null
+                ? PhysicalFile(archivo.Ruta, archivo.Mime)
+                : File(archivo.Contenido!, archivo.Mime);
         });
 
     // ---------- Acciones ----------
