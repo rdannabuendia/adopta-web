@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import Avatar from "../ui/Avatar";
 import DropdownMenu from "../ui/DropdownMenu";
 import IconButton from "../ui/IconButton";
+import NotificationBell from "./NotificationBell";
 import { mediaUrl } from "../../utils/media";
-import { ChevronDownIcon, LogoutIcon, MenuIcon, PawIcon, UserIcon } from "../ui/Icons";
+import { ChevronDownIcon, LogoutIcon, MenuIcon, UserIcon } from "../ui/Icons";
+import logo from "../../assets/img/adopta_logo.svg";
 
 export default function Topbar({ user, title, menuOpen, onToggleMenu, onLogout }) {
   const firstName = user?.nombre?.trim().split(/\s+/)[0] || "Usuario";
@@ -20,12 +22,13 @@ export default function Topbar({ user, title, menuOpen, onToggleMenu, onLogout }
         <MenuIcon />
       </IconButton>
 
-      <Link to="/inicio" className="topbar__brand">
-        <PawIcon />
-        <span>Adopta+</span>
+      <Link to="/inicio" className="topbar__brand" aria-label="Ir al inicio">
+        <img className="topbar__logo" src={logo} alt="Adopta+" />
       </Link>
 
       <p className="topbar__title">{title}</p>
+
+      <NotificationBell />
 
       <DropdownMenu
         className="topbar__user"

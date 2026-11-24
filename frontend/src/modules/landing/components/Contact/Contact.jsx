@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import BaseButton from "../../../../components/ui/BaseButton";
+import landingService from "../../services/landing.service";
 import "./Contact.css";
 
 const MaskIcon = ({ src, className = "" }) => (
@@ -58,14 +59,14 @@ const info = [
   {
     icon: icons.mail,
     title: "Correo",
-    text: "contacto@adoptamas.com",
-    href: "mailto:contacto@adoptamas.com",
+    text: "adoptasoporte@gmail.com",
+    href: "mailto:adoptasoporte@gmail.com",
   },
   {
     icon: icons.phone,
     title: "Teléfono",
-    text: "+52 477 000 0000",
-    href: "tel:+524770000000",
+    text: "+52 477 802 6243",
+    href: "tel:+524778026243",
   },
   { icon: icons.pin, title: "Ubicación", text: "León, Guanajuato, México" },
   { icon: icons.clock, title: "Horario", text: "Lun a Vie · 9:00 – 18:00" },
@@ -86,6 +87,7 @@ export default function Contact() {
   const [isVisible, setIsVisible] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [message, setMessage] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -105,17 +107,20 @@ export default function Contact() {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.currentTarget));
     setStatus("sending");
+    setErrorMsg("");
     try {
-      console.log("Mensaje:", data);
-      await new Promise((r) => setTimeout(r, 1200)); // simulación, bórrala
+      // El backend lo envía a adoptasoporte@gmail.com
+      await landingService.sendContactMessage(data);
       setStatus("sent");
-    } catch {
+    } catch (err) {
+      setErrorMsg(err?.message || "");
       setStatus("error");
     }
   };
 
   const reset = () => {
     setMessage("");
+    setErrorMsg("");
     setStatus("idle");
   };
 
@@ -208,6 +213,16 @@ export default function Contact() {
                 <p>Completa el formulario y te contactaremos.</p>
               </header>
 
+              {/* Campo trampa anti-spam: las personas no lo ven ni lo llenan */}
+              <input
+                type="text"
+                name="web"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+              />
+
               <div className="form__row">
                 <label className="field">
                   <span className="field__label">Nombre</span>
@@ -276,8 +291,8 @@ export default function Contact() {
 
               {status === "error" && (
                 <p className="form__error" role="alert">
-                  No pudimos enviar tu mensaje. Inténtalo de nuevo en unos
-                  minutos.
+                  {errorMsg ||
+                    "No pudimos enviar tu mensaje. Inténtalo de nuevo en unos minutos."}
                 </p>
               )}
 

@@ -36,6 +36,8 @@ builder.Services.AddSwaggerGen();
 // Servicios
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IContactoService, ContactoService>();
+builder.Services.AddScoped<IPublicoService, PublicoService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<IOrganizacionService, OrganizacionService>();
 builder.Services.AddScoped<IPerfilService, PerfilService>();
@@ -44,6 +46,8 @@ builder.Services.AddScoped<IMascotaService, MascotaService>();
 builder.Services.AddScoped<ISeguimientoService, SeguimientoService>();
 builder.Services.AddScoped<ISolicitudAdopcionService, SolicitudAdopcionService>();
 builder.Services.AddScoped<IReportesService, ReportesService>();
+builder.Services.AddScoped<INotificacionesService, NotificacionesService>();
+builder.Services.AddScoped<IAdministradorService, AdministradorService>();
 builder.Services.AddSingleton<IReporteExportService, ReporteExportService>();
 
 // CORS
@@ -82,6 +86,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 // Fotos de seguimiento que sube el adoptante desde la app móvil: si la app las guarda en otra carpeta
+// (Storage:MobileRoot, con subcarpeta "seguimiento"), se publican también bajo /uploads/seguimiento.
 var mobileRoot = cfg["Storage:MobileRoot"];
 if (!string.IsNullOrWhiteSpace(mobileRoot))
 {

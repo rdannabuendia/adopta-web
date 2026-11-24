@@ -6,6 +6,7 @@ import {
   PawIcon,
   TimelineIcon,
   UserIcon,
+  UsersIcon,
 } from "../ui/Icons";
 
 export const ROLES = {
@@ -47,6 +48,13 @@ export const NAV_ITEMS = [
     ],
   },
   {
+    label: "Administradores",
+    to: "/administradores",
+    icon: UsersIcon,
+    roles: [ROLES.ADMIN],
+    description: "Registra a otras personas con acceso de administrador.",
+  },
+  {
     label: "Mascotas",
     to: "/mascotas",
     icon: PawIcon,
@@ -56,7 +64,7 @@ export const NAV_ITEMS = [
   {
     label: "Seguimiento de mascotas",
     icon: TimelineIcon,
-    roles: ADMIN_ORG,
+    roles: [ROLES.ORG],
     description: "Adaptación de mascotas adoptadas y devoluciones.",
     children: [
       { label: "Gestión de seguimiento", to: "/seguimiento", end: true },

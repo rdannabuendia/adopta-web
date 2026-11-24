@@ -26,9 +26,7 @@ async function post(path, body) {
 }
 
 /* ---------- Sesión ---------- */
-export async function login({ email, password }) {
-  const data = await post("login", { email, password });
-
+function saveSession(data) {
   const token = data.token ?? data.accessToken;
   const usuario = data.usuario ?? data.user;
 
@@ -40,6 +38,41 @@ export async function login({ email, password }) {
   localStorage.setItem(USER_KEY, JSON.stringify(usuario));
   return data;
 }
+
+export async function login({ email, password }) {
+  return saveSession(await post("login", { email, password }));
+}
+
+/**
+ * Primer inicio de sesión de un administrador: cambia la contraseña temporal por una propia.
+ * El servidor responde con un token nuevo (sin la marca de "debe cambiar contraseña").
+ */
+export async function changeInitialPassword({ passwordActual, nuevaPassword, confirmarPassword }) {
+  let response;
+  try {
+    response = await fetch(`${API_URL}/api/auth/change-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
+      body: JSON.stringify({ passwordActual, nuevaPassword, confirmarPassword }),
+    });
+  } catch {
+    throw new Error("No se pudo conectar con el servidor. Verifica que la API esté encendida.");
+  }
+
+  const data = await response.json().catch(() => ({}));
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Tu sesión expiró. Inicia sesión de nuevo.");
+  }
+  if (!response.ok) {
+    throw new Error(data.mensaje || data.message || "Ocurrió un error. Intenta de nuevo.");
+  }
+
+  return saveSession(data);
+}
+
+export const mustChangePassword = () => Boolean(getUser()?.debeCambiarPassword);
 
 export function logout() {
   localStorage.removeItem(TOKEN_KEY);

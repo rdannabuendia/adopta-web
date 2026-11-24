@@ -1,4 +1,4 @@
-import { getToken, logout } from "../modules/auth/services/authService";
+import { getToken, logout, updateStoredUser } from "../modules/auth/services/authService";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5000";
 
@@ -29,6 +29,14 @@ export async function apiFetch(path, options = {}) {
   }
 
   const data = await response.json().catch(() => ({}));
+
+  // La API solo permite cambiar la contraseña mientras se use la temporal
+  if (response.status === 403 && data.codigo === "CAMBIO_PASSWORD_REQUERIDO") {
+    updateStoredUser({ debeCambiarPassword: true });
+    window.location.assign("/primer-cambio-password");
+    throw new Error(data.mensaje);
+  }
+
   if (!response.ok) throw new Error(data.mensaje || "No se pudo completar la solicitud.");
   return data;
 }
@@ -36,6 +44,13 @@ export async function apiFetch(path, options = {}) {
 export const postJson = (path, body) =>
   apiFetch(path, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+
+export const sendJson = (method, path, body) =>
+  apiFetch(path, {
+    method,
     headers: { "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
   });

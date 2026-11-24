@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Adopta.Api.Services;
 
-/// <summary>Error de negocio con código HTTP (400, 409...).</summary>
 public class NegocioException : Exception
 {
     public int Status { get; }
@@ -264,15 +263,13 @@ public class OrganizacionService : IOrganizacionService
 
     private async Task EnviarConfirmacionAsync(string correo, string nombreOrg)
     {
-        var html = $"""
-            <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;color:#222">
-              <h2 style="color:#6aa3a3">Adopta+</h2>
-              <p>Hola, recibimos la solicitud de registro de <strong>{System.Net.WebUtility.HtmlEncode(nombreOrg)}</strong>.</p>
-              <p>Nuestro equipo revisará la información y los documentos que enviaste. Te avisaremos por este
-              correo cuando tu cuenta sea aprobada. Mientras tanto no podrás iniciar sesión.</p>
-              <p style="font-size:13px;color:#666">Si no realizaste esta solicitud, ignora este mensaje.</p>
-            </div>
-            """;
+        var html = EmailPlantilla.Envolver(
+            "Recibimos tu solicitud",
+            EmailPlantilla.Parrafo("Hola,") +
+            EmailPlantilla.Parrafo($"Recibimos la solicitud de registro de <strong>{EmailPlantilla.Html(nombreOrg)}</strong>. ¡Gracias por querer ser parte de Adopta+!") +
+            EmailPlantilla.Parrafo("Nuestro equipo revisará la información y los documentos que enviaste. Te avisaremos por este mismo correo cuando tu cuenta sea aprobada. Mientras tanto no podrás iniciar sesión.") +
+            EmailPlantilla.Nota("Si no realizaste esta solicitud, ignora este mensaje."),
+            "Tu solicitud de registro está en revisión");
 
         try { await _email.EnviarAsync(correo, "Recibimos tu solicitud - Adopta+", html); }
         catch (Exception ex)

@@ -9,7 +9,7 @@ namespace Adopta.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Administrador,Organizacion")]
+[Authorize(Roles = "Organizacion")]
 public class SeguimientoController : ControllerBase
 {
     private readonly ISeguimientoService _seguimiento;

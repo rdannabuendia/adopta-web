@@ -35,10 +35,10 @@ export default function Hero() {
         </p>
 
         <div className="hero__actions">
-          <BaseButton href="/mascotas" icon={<img src="/icons/huellas/huella_blanca.svg" alt="" />}>
+          <BaseButton href="#petscarrousel" icon={<img src="/icons/huellas/huella_blanca.svg" alt="" />}>
             Ver mascotas
           </BaseButton>
-          <BaseButton href="/nosotros" variant="secondary">
+          <BaseButton href="#about" variant="secondary">
             Conoce más
           </BaseButton>
         </div>

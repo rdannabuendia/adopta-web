@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import logo from "../../../../assets/img/adopta_logo.svg";
 import BaseButton from "../../../../components/ui/BaseButton";
+import { scrollToSection } from "../../../../utils/scroll";
 import "./Navbar.css";
 
 const LINKS = [
   { label: "Inicio", id: "inicio" },
+  { label: "Mascotas", id: "mascotas" },
   { label: "Sobre Nosotros", id: "sobre-nosotros" },
   { label: "¿Cómo funciona?", id: "como-funciona" },
   { label: "FAQ", id: "faq" },
@@ -62,7 +64,10 @@ export default function Navbar() {
                 key={id}
                 href={`#${id}`}
                 className={activo === id ? "is-active" : ""}
-                onClick={cerrar}
+                onClick={(e) => {
+                  scrollToSection(id, e);
+                  cerrar();
+                }}
               >
                 {label}
               </a>
@@ -92,7 +97,7 @@ export default function Navbar() {
             >
               Iniciar Sesión
             </BaseButton>
-            <BaseButton to="/registro-organizacion" size="sm" onClick={cerrar}>
+            <BaseButton to="/registro" size="sm" onClick={cerrar}>
               Registrarse
             </BaseButton>
           </div>

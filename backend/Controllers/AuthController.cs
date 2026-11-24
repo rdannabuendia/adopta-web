@@ -94,6 +94,28 @@ public class AuthController : ControllerBase
         return Ok(new MensajeResponseDto { Mensaje = "Tu contraseña se actualizó correctamente." });
     }
 
+    // POST /api/auth/change-password  (sesión iniciada; es el único endpoint permitido con contraseña temporal)
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromBody] CambiarPasswordRequestDto request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(new ErrorResponseDto { Mensaje = PrimerError() });
+
+        var sub = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value;
+        if (!int.TryParse(sub, out var idUsuario))
+            return Unauthorized(new ErrorResponseDto { Mensaje = "Sesión no válida." });
+
+        try
+        {
+            return Ok(await _authService.CambiarPasswordAsync(idUsuario, request));
+        }
+        catch (NegocioException ex)
+        {
+            return StatusCode(ex.Status, new ErrorResponseDto { Mensaje = ex.Message });
+        }
+    }
+
     // GET /api/auth/me
     [HttpGet("me")]
     [Authorize]

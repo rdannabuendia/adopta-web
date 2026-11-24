@@ -204,11 +204,12 @@ public class OrganizacionAdminService : IOrganizacionAdminService
 
         await tx.CommitAsync();
 
-        await EnviarAsync(usuario.Correo, "Tu organización fue dada de baja - Adopta+", Plantilla($"""
-            <p>La organización <strong>{Html(org.Nombre)}</strong> fue dada de baja de Adopta+ por incumplimiento.</p>
-            <p><strong>Motivo:</strong> {Html(motivo.Nombre)}<br/><strong>Detalle:</strong> {Html(descripcion)}</p>
-            <p style="font-size:13px;color:#666">Mientras la baja esté vigente no podrás iniciar sesión. Si crees que se trata de un error, contacta al administrador.</p>
-            """));
+        await EnviarAsync(usuario.Correo, "Tu organización fue dada de baja - Adopta+", Plantilla(
+            "Tu organización fue dada de baja",
+            EmailPlantilla.Parrafo($"La organización <strong>{Html(org.Nombre)}</strong> fue dada de baja de Adopta+ por incumplimiento.") +
+            EmailPlantilla.Datos(("Motivo", motivo.Nombre), ("Detalle", descripcion)) +
+            EmailPlantilla.Nota("Mientras la baja esté vigente no podrás iniciar sesión. Si crees que se trata de un error, contacta al administrador."),
+            "Tu organización fue dada de baja de Adopta+"));
     }
 
     // ---------- Solicitudes de registro ----------
@@ -262,14 +263,13 @@ public class OrganizacionAdminService : IOrganizacionAdminService
 
         var link = await _reset.GenerarEnlaceAsync(usuario.IdUsuario, TimeSpan.FromDays(7));
 
-        await EnviarAsync(usuario.Correo, "¡Tu organización fue aprobada! - Adopta+", Plantilla($"""
-            <p>¡Buenas noticias! La solicitud de <strong>{Html(org.Nombre)}</strong> fue aprobada.</p>
-            <p>Crea tu contraseña para empezar a usar la plataforma:</p>
-            <p style="text-align:center;margin:28px 0">
-              <a href="{link}" style="background:#6aa3a3;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:bold">Crear contraseña</a>
-            </p>
-            <p style="font-size:13px;color:#666">El enlace vence en 7 días. Después puedes usar "¿Olvidaste tu contraseña?" en el inicio de sesión.</p>
-            """));
+        await EnviarAsync(usuario.Correo, "¡Tu organización fue aprobada! - Adopta+", Plantilla(
+            "¡Tu organización fue aprobada!",
+            EmailPlantilla.Parrafo($"¡Buenas noticias! La solicitud de <strong>{Html(org.Nombre)}</strong> fue aprobada.") +
+            EmailPlantilla.Parrafo("Crea tu contraseña para empezar a usar la plataforma:") +
+            EmailPlantilla.Boton("Crear contraseña", link) +
+            EmailPlantilla.Nota("El enlace vence en 7 días. Después puedes usar “¿Olvidaste tu contraseña?” en el inicio de sesión."),
+            "Ya puedes crear tu contraseña y empezar en Adopta+"));
     }
 
     public async Task RechazarAsync(int id, string motivo)
@@ -293,11 +293,13 @@ public class OrganizacionAdminService : IOrganizacionAdminService
 
         BorrarDocumentos(id);
 
-        await EnviarAsync(correo, "Resultado de tu solicitud - Adopta+", Plantilla($"""
-            <p>Revisamos la solicitud de registro de <strong>{Html(nombre)}</strong> y por ahora no pudimos aprobarla.</p>
-            <p><strong>Motivo:</strong> {Html(motivo)}</p>
-            <p style="font-size:13px;color:#666">Puedes corregir la información y enviar una nueva solicitud cuando quieras.</p>
-            """));
+        await EnviarAsync(correo, "Resultado de tu solicitud - Adopta+", Plantilla(
+            "Resultado de tu solicitud",
+            EmailPlantilla.Parrafo($"Revisamos la solicitud de registro de <strong>{Html(nombre)}</strong> y por ahora no pudimos aprobarla.") +
+            EmailPlantilla.Parrafo("<strong>Motivo</strong>") +
+            EmailPlantilla.Cita(EmailPlantilla.HtmlConSaltos(motivo)) +
+            EmailPlantilla.Nota("Puedes corregir la información y enviar una nueva solicitud cuando quieras."),
+            "Resultado de la revisión de tu solicitud"));
     }
 
     // ---------- Helpers ----------
@@ -315,12 +317,8 @@ public class OrganizacionAdminService : IOrganizacionAdminService
 
     private static string Html(string texto) => System.Net.WebUtility.HtmlEncode(texto);
 
-    private static string Plantilla(string cuerpo) => $"""
-        <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;color:#222">
-          <h2 style="color:#6aa3a3">Adopta+</h2>
-          {cuerpo}
-        </div>
-        """;
+    private static string Plantilla(string titulo, string cuerpo, string? preheader = null) =>
+        EmailPlantilla.Envolver(titulo, cuerpo, preheader);
 
     private void BorrarDocumentos(int idOrganizacion)
     {

@@ -7,10 +7,6 @@ namespace Adopta.Api.Data;
 
 public partial class AdoptaDbContext : DbContext
 {
-    public AdoptaDbContext()
-    {
-    }
-
     public AdoptaDbContext(DbContextOptions<AdoptaDbContext> options)
         : base(options)
     {
@@ -82,14 +78,13 @@ public partial class AdoptaDbContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
+    public virtual DbSet<VerificacionesCorreo> VerificacionesCorreos { get; set; }
+
     public virtual DbSet<VistaCatalogoMascota> VistaCatalogoMascotas { get; set; }
 
     public virtual DbSet<VistaReportesSeguimiento> VistaReportesSeguimientos { get; set; }
 
     public virtual DbSet<VistaSolicitudesAdopcion> VistaSolicitudesAdopcions { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySQL("Server=adopta.mysql.database.azure.com;Port=3306;Database=adopta_db;User=adminadopta;Password=Adopta1234#;SslMode=Required;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1195,6 +1190,7 @@ public partial class AdoptaDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_expiracion");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            entity.Property(e => e.Intentos).HasColumnName("intentos");
             entity.Property(e => e.TokenHash)
                 .HasMaxLength(64)
                 .IsFixedLength()
@@ -1230,9 +1226,10 @@ public partial class AdoptaDbContext : DbContext
             entity.Property(e => e.Correo)
                 .HasMaxLength(120)
                 .HasColumnName("correo");
+            entity.Property(e => e.DebeCambiarPassword).HasColumnName("debe_cambiar_password");
             entity.Property(e => e.Estado)
                 .HasDefaultValueSql("'Activo'")
-                .HasColumnType("enum('Activo','Inactivo','Bloqueado')")
+                .HasColumnType("enum('Activo','Inactivo','Bloqueado','Pendiente')")
                 .HasColumnName("estado");
             entity.Property(e => e.FechaRegistro)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -1255,59 +1252,38 @@ public partial class AdoptaDbContext : DbContext
                 .HasConstraintName("fk_usuarios_roles");
         });
 
+        modelBuilder.Entity<VerificacionesCorreo>(entity =>
+        {
+            entity.HasKey(e => e.IdVerificacion).HasName("PRIMARY");
+
+            entity.ToTable("verificaciones_correo");
+
+            entity.HasIndex(e => e.IdUsuario, "uq_verificacion_usuario").IsUnique();
+
+            entity.Property(e => e.IdVerificacion).HasColumnName("id_verificacion");
+            entity.Property(e => e.CodigoHash)
+                .HasMaxLength(255)
+                .HasColumnName("codigo_hash");
+            entity.Property(e => e.FechaCreacion)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_creacion");
+            entity.Property(e => e.FechaExpiracion)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_expiracion");
+            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            entity.Property(e => e.Intentos).HasColumnName("intentos");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithOne(p => p.VerificacionesCorreo)
+                .HasForeignKey<VerificacionesCorreo>(d => d.IdUsuario)
+                .HasConstraintName("fk_verificacion_usuario");
+        });
+
         modelBuilder.Entity<VistaCatalogoMascota>(entity =>
         {
             entity
                 .HasNoKey()
                 .ToView("vista_catalogo_mascotas");
-
-            entity.Property(e => e.Color)
-                .HasMaxLength(60)
-                .HasColumnName("color");
-            entity.Property(e => e.Comportamiento)
-                .HasColumnType("text")
-                .HasColumnName("comportamiento");
-            entity.Property(e => e.Descripcion)
-                .HasColumnType("text")
-                .HasColumnName("descripcion");
-            entity.Property(e => e.EdadAproximada)
-                .HasMaxLength(40)
-                .HasColumnName("edad_aproximada");
-            entity.Property(e => e.Especie)
-                .HasMaxLength(50)
-                .HasColumnName("especie");
-            entity.Property(e => e.EstadoAdaptacion)
-                .HasMaxLength(40)
-                .HasColumnName("estado_adaptacion");
-            entity.Property(e => e.EstadoMascota)
-                .HasMaxLength(40)
-                .HasColumnName("estado_mascota");
-            entity.Property(e => e.EstadoSalud)
-                .HasColumnType("text")
-                .HasColumnName("estado_salud");
-            entity.Property(e => e.Esterilizado).HasColumnName("esterilizado");
-            entity.Property(e => e.FotoPrincipal)
-                .HasMaxLength(255)
-                .HasColumnName("foto_principal");
-            entity.Property(e => e.IdMascota).HasColumnName("id_mascota");
-            entity.Property(e => e.IdOrganizacion).HasColumnName("id_organizacion");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(80)
-                .HasColumnName("nombre");
-            entity.Property(e => e.Organizacion)
-                .HasMaxLength(120)
-                .HasColumnName("organizacion");
-            entity.Property(e => e.Raza)
-                .HasMaxLength(80)
-                .HasColumnName("raza");
-            entity.Property(e => e.Sexo)
-                .HasDefaultValueSql("'Desconocido'")
-                .HasColumnType("enum('Macho','Hembra','Desconocido')")
-                .HasColumnName("sexo");
-            entity.Property(e => e.Tamano)
-                .HasColumnType("enum('Pequeno','Mediano','Grande')")
-                .HasColumnName("tamano");
-            entity.Property(e => e.Vacunado).HasColumnName("vacunado");
         });
 
         modelBuilder.Entity<VistaReportesSeguimiento>(entity =>
@@ -1315,41 +1291,6 @@ public partial class AdoptaDbContext : DbContext
             entity
                 .HasNoKey()
                 .ToView("vista_reportes_seguimiento");
-
-            entity.Property(e => e.Adaptacion)
-                .HasColumnType("text")
-                .HasColumnName("adaptacion");
-            entity.Property(e => e.Adoptante)
-                .HasMaxLength(141)
-                .HasDefaultValueSql("''")
-                .HasColumnName("adoptante");
-            entity.Property(e => e.Alimentacion)
-                .HasColumnType("text")
-                .HasColumnName("alimentacion");
-            entity.Property(e => e.Comportamiento)
-                .HasColumnType("text")
-                .HasColumnName("comportamiento");
-            entity.Property(e => e.FechaReporte)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime")
-                .HasColumnName("fecha_reporte");
-            entity.Property(e => e.IdAdopcion).HasColumnName("id_adopcion");
-            entity.Property(e => e.IdAdoptante).HasColumnName("id_adoptante");
-            entity.Property(e => e.IdMascota).HasColumnName("id_mascota");
-            entity.Property(e => e.IdOrganizacion).HasColumnName("id_organizacion");
-            entity.Property(e => e.IdReporte).HasColumnName("id_reporte");
-            entity.Property(e => e.Mascota)
-                .HasMaxLength(80)
-                .HasColumnName("mascota");
-            entity.Property(e => e.Observaciones)
-                .HasColumnType("text")
-                .HasColumnName("observaciones");
-            entity.Property(e => e.Organizacion)
-                .HasMaxLength(120)
-                .HasColumnName("organizacion");
-            entity.Property(e => e.Salud)
-                .HasColumnType("text")
-                .HasColumnName("salud");
         });
 
         modelBuilder.Entity<VistaSolicitudesAdopcion>(entity =>
@@ -1357,35 +1298,6 @@ public partial class AdoptaDbContext : DbContext
             entity
                 .HasNoKey()
                 .ToView("vista_solicitudes_adopcion");
-
-            entity.Property(e => e.Adoptante)
-                .HasMaxLength(141)
-                .HasDefaultValueSql("''")
-                .HasColumnName("adoptante");
-            entity.Property(e => e.Correo)
-                .HasMaxLength(120)
-                .HasColumnName("correo");
-            entity.Property(e => e.DocumentacionCompleta).HasColumnName("documentacion_completa");
-            entity.Property(e => e.EstadoSolicitud)
-                .HasMaxLength(40)
-                .HasColumnName("estado_solicitud");
-            entity.Property(e => e.FechaLimiteDocumentos)
-                .HasColumnType("date")
-                .HasColumnName("fecha_limite_documentos");
-            entity.Property(e => e.FechaSolicitud)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime")
-                .HasColumnName("fecha_solicitud");
-            entity.Property(e => e.IdAdoptante).HasColumnName("id_adoptante");
-            entity.Property(e => e.IdMascota).HasColumnName("id_mascota");
-            entity.Property(e => e.IdOrganizacion).HasColumnName("id_organizacion");
-            entity.Property(e => e.IdSolicitud).HasColumnName("id_solicitud");
-            entity.Property(e => e.Mascota)
-                .HasMaxLength(80)
-                .HasColumnName("mascota");
-            entity.Property(e => e.Organizacion)
-                .HasMaxLength(120)
-                .HasColumnName("organizacion");
         });
 
         OnModelCreatingPartial(modelBuilder);

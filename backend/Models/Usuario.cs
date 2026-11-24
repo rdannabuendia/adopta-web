@@ -30,6 +30,8 @@ public partial class Usuario
 
     public string Estado { get; set; } = null!;
 
+    public bool DebeCambiarPassword { get; set; }
+
     public virtual ICollection<ArchivosRequisito> ArchivosRequisitos { get; set; } = new List<ArchivosRequisito>();
 
     public virtual ICollection<BajasOrganizacion> BajasOrganizacions { get; set; } = new List<BajasOrganizacion>();

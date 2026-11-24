@@ -1,0 +1,135 @@
+.bell { position: relative; }
+
+.bell__btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  color: #1d3f5c;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.bell__btn:hover, .bell__btn.is-open { background: #f2f8f7; }
+.bell__btn:focus-visible { outline: 2px solid #6aa3a3; outline-offset: 2px; }
+
+.bell__badge {
+  position: absolute;
+  top: 2px;
+  right: 1px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 17px;
+  color: #fff;
+  text-align: center;
+  background: #d64545;
+  border: 2px solid #fff;
+  box-sizing: content-box;
+  border-radius: 999px;
+}
+
+.bell__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 24px));
+  max-height: min(480px, 70vh);
+  background: #fff;
+  border: 1px solid #d9dfe2;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(22, 54, 90, 0.12);
+  overflow: hidden;
+}
+
+.bell__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  color: #1d3f5c;
+  border-bottom: 1px solid #d9dfe2;
+}
+
+.bell__all {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1f7f8f;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.bell__all svg { width: 16px; height: 16px; }
+.bell__all:hover:not(:disabled) { background: #e6f4f1; }
+.bell__all:disabled { color: #9aa7b0; cursor: default; }
+
+.bell__list { overflow-y: auto; }
+
+.bell__empty { margin: 0; padding: 28px 16px; font-size: 0.85rem; color: #5b6b78; text-align: center; }
+
+.bell__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid #eef2f3;
+  cursor: pointer;
+}
+.bell__item:last-child { border-bottom: 0; }
+.bell__item:hover { background: #f7fbfa; }
+.bell__item:focus-visible { outline: 2px solid #6aa3a3; outline-offset: -2px; }
+.bell__item.is-unread { background: #f2f8f7; }
+
+.bell__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  background: transparent;
+  border-radius: 50%;
+}
+.is-unread .bell__dot { background: #1f7f8f; }
+.is-unread.bell__item--success .bell__dot { background: #2e9e6b; }
+.is-unread.bell__item--warning .bell__dot { background: #e0a030; }
+
+.bell__body { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+.bell__title { font-size: 0.85rem; font-weight: 600; color: #1d3f5c; }
+.bell__item:not(.is-unread) .bell__title { font-weight: 500; }
+.bell__msg { font-size: 0.8rem; line-height: 1.35; color: #2a3b47; }
+.bell__time { font-size: 0.72rem; color: #7a8893; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  /* En móvil el panel se ancla al viewport para no salirse de la pantalla */
+  .bell { position: static; }
+  .bell__panel { top: 62px; right: 12px; }
+}

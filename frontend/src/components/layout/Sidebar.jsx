@@ -61,40 +61,46 @@ export default function Sidebar({ items, open, onLogout }) {
       className={`sidebar${open ? " is-open" : ""}`}
       aria-label="Navegación principal"
     >
-      <p className="side-label">MENÚ PRINCIPAL</p>
+      {/* Menú: si hay muchas opciones desplegadas, solo esta zona hace scroll */}
+      <div className="sidebar__scroll">
+        <p className="side-label">MENÚ PRINCIPAL</p>
 
-      <ul className="side-list">
-        {items.map((item) =>
-          item.children ? (
-            <SidebarGroup key={item.label} item={item} />
-          ) : (
-            <li key={item.to}>
-              <NavLink
-                to={item.to}
-                className={({ isActive }) =>
-                  `side-link${isActive ? " is-active" : ""}`
-                }
-              >
-                <span className="side-link__icon">
-                  <item.icon />
-                </span>
-                <span className="side-link__label">{item.label}</span>
-              </NavLink>
-            </li>
-          ),
-        )}
-      </ul>
+        <ul className="side-list">
+          {items.map((item) =>
+            item.children ? (
+              <SidebarGroup key={item.label} item={item} />
+            ) : (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `side-link${isActive ? " is-active" : ""}`
+                  }
+                >
+                  <span className="side-link__icon">
+                    <item.icon />
+                  </span>
+                  <span className="side-link__label">{item.label}</span>
+                </NavLink>
+              </li>
+            ),
+          )}
+        </ul>
+      </div>
 
-      <BaseButton
-        variant="secondary"
-        size="lg"
-        fullWidth
-        icon={<LogoutIcon />}
-        className="side-logout"
-        onClick={onLogout}
-      >
-        Cerrar Sesión
-      </BaseButton>
+      {/* Siempre pegado al fondo del sidebar, sin importar qué grupos estén abiertos */}
+      <div className="sidebar__footer">
+        <BaseButton
+          variant="secondary"
+          size="lg"
+          fullWidth
+          icon={<LogoutIcon />}
+          className="side-logout"
+          onClick={onLogout}
+        >
+          Cerrar Sesión
+        </BaseButton>
+      </div>
     </nav>
   );
 }

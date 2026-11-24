@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { scrollToSection } from "../../../../utils/scroll";
 import "./Footer.css";
 
 /* Pinta un SVG de /public con el color del texto */
@@ -37,7 +38,7 @@ const columns = [
     title: "Plataforma",
     links: [
       { label: "Inicio", href: "#inicio" },
-      { label: "Ver mascotas", href: "/mascotas" },
+      { label: "Ver mascotas", href: "#mascotas" },
       { label: "Sobre nosotros", href: "#sobre-nosotros" },
       { label: "¿Cómo funciona?", href: "#como-funciona" },
     ],
@@ -45,8 +46,8 @@ const columns = [
   {
     title: "Comunidad",
     links: [
-      { label: "Para adoptantes", href: "/registro" },
-      { label: "Para organizaciones", href: "/organizaciones" },
+      { label: "Para adoptantes", href: "#plataformas" },
+      { label: "Para organizaciones", href: "#plataformas" },
       { label: "Preguntas frecuentes", href: "#faq" },
       { label: "Contáctanos", href: "#contacto" },
     ],
@@ -105,16 +106,6 @@ export default function Footer() {
         {/* ---------- Columnas ---------- */}
         <div className="footer__grid">
           <div className="footer__brand reveal" style={{ "--i": 1 }}>
-            <a href="#inicio" className="footer__logo" aria-label="Adopta+ — inicio">
-              <span className="footer__logo-mark">
-                <MaskIcon src="/icons/huellas/huella_g.svg" />
-              </span>
-              Adopta<span>+</span>
-            </a>
-            <p>
-              Conectamos a personas que quieren dar un hogar con mascotas que lo
-              necesitan, y te acompañamos después de la adopción.
-            </p>
 
             <ul className="footer__social">
               {social.map((s) => (
@@ -138,7 +129,14 @@ export default function Footer() {
               <ul>
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <a href={l.href}>{l.label}</a>
+                    <a
+                      href={l.href}
+                      onClick={(e) =>
+                        l.href.startsWith("#") && scrollToSection(l.href.slice(1), e)
+                      }
+                    >
+                      {l.label}
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -150,11 +148,11 @@ export default function Footer() {
             <ul className="footer__contact">
               <li>
                 {icons.mail}
-                <a href="mailto:contacto@adoptamas.com">contacto@adoptamas.com</a>
+                <a href="mailto:adoptasoporte@gmail.com">adoptasoporte@gmail.com</a>
               </li>
               <li>
                 {icons.phone}
-                <a href="tel:+524770000000">+52 477 000 0000</a>
+                <a href="tel:+524770000000">+52 477 802 6243</a>
               </li>
               <li>
                 {icons.pin}

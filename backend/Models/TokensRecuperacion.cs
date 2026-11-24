@@ -17,5 +17,7 @@ public partial class TokensRecuperacion
 
     public bool Usado { get; set; }
 
+    public int Intentos { get; set; }
+
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

@@ -9,6 +9,9 @@ import ProtectedRoute from "./modules/auth/components/ProtectedRoute";
 import DashboardPage from "./modules/dashboard/pages/DashboardPage";
 import PerfilPage from "./modules/auth/pages/PerfilPage";
 import EditarPerfilPage from "./modules/auth/pages/EditarPerfilPage";
+import CambioPasswordInicialPage from "./modules/auth/pages/CambioPasswordInicialPage";
+import AdministradoresPage from "./modules/administradores/pages/AdministradoresPage";
+import AdministradorFormPage from "./modules/administradores/pages/AdministradorFormPage";
 import OrganizacionesPage from "./modules/organizaciones/pages/OrganizacionesPage";
 import OrganizacionDetallePage from "./modules/organizaciones/pages/OrganizacionDetallePage";
 import OrganizacionBajaPage from "./modules/organizaciones/pages/OrganizacionBajaPage";
@@ -51,6 +54,9 @@ export default function App() {
 
         {/* Rutas protegidas dentro del layout con sidebar */}
         <Route element={<ProtectedRoute />}>
+          {/* Contraseña temporal: pantalla sin menú; ProtectedRoute obliga a pasar por aquí */}
+          <Route path="/primer-cambio-password" element={<CambioPasswordInicialPage />} />
+
           <Route element={<AppLayout />}>
             <Route path="/inicio" element={<DashboardPage />} />
             <Route path="/perfil" element={<PerfilPage />} />
@@ -63,6 +69,10 @@ export default function App() {
               <Route path="/reportes/solicitudes" element={<ReporteSolicitudesPage />} />
               <Route path="/reportes/mascotas" element={<ReporteMascotasPage />} />
               <Route path="/reportes/exportar" element={<ExportarReportePage />} />
+
+              <Route path="/administradores" element={<AdministradoresPage />} />
+              <Route path="/administradores/nuevo" element={<AdministradorFormPage />} />
+              <Route path="/administradores/:id/editar" element={<AdministradorFormPage />} />
 
               <Route path="/organizaciones" element={<OrganizacionesPage />} />
               <Route
@@ -91,8 +101,11 @@ export default function App() {
             <Route element={<ProtectedRoute roles={ADMIN_ORG} />}>
               <Route path="/mascotas" element={<MascotasHomePage />} />
               <Route path="/mascotas/:id" element={<MascotaDetallePage />} />
+            </Route>
 
-              {/* Seguimiento: la organización gestiona; el admin solo consulta */}
+            {/* Solo organización */}
+            <Route element={<ProtectedRoute roles={ORG} />}>
+              {/* Seguimiento de mascotas: solo organización */}
               <Route path="/seguimiento" element={<SeguimientoListaPage />} />
               <Route
                 path="/seguimiento/devoluciones"
@@ -103,10 +116,7 @@ export default function App() {
                 element={<DevolucionDetallePage />}
               />
               <Route path="/seguimiento/:id" element={<SeguimientoDetallePage />} />
-            </Route>
 
-            {/* Solo organización */}
-            <Route element={<ProtectedRoute roles={ORG} />}>
               <Route path="/mascotas/nueva" element={<MascotaFormPage />} />
               <Route path="/mascotas/:id/editar" element={<MascotaFormPage />} />
               <Route

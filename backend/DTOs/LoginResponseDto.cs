@@ -7,6 +7,7 @@ public class UsuarioDto
     public string Email { get; set; } = string.Empty;
     public string Rol { get; set; } = string.Empty;
     public string? FotoUrl { get; set; }
+    public bool DebeCambiarPassword { get; set; }
 }
 
 public class LoginResponseDto

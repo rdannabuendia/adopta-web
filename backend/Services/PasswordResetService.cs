@@ -171,18 +171,11 @@ public class PasswordResetService : IPasswordResetService
         return "******" + local[^visibles..] + "@" + partes[1];
     }
 
-    private string ConstruirCorreo(string nombre, string link) => $"""
-        <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;color:#222">
-          <h2 style="color:#6aa3a3">Adopta+</h2>
-          <p>Hola {System.Net.WebUtility.HtmlEncode(nombre)},</p>
-          <p>Recibimos una solicitud para restablecer tu contraseña. Haz clic en el botón para crear una nueva:</p>
-          <p style="text-align:center;margin:28px 0">
-            <a href="{link}" style="background:#6aa3a3;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:bold">
-              Cambiar contraseña
-            </a>
-          </p>
-          <p style="font-size:13px;color:#666">El enlace vence en {ExpireMinutes} minutos y solo puede usarse una vez.
-          Si no lo solicitaste, ignora este correo.</p>
-        </div>
-        """;
+    private string ConstruirCorreo(string nombre, string link) => EmailPlantilla.Envolver(
+        "Restablece tu contraseña",
+        EmailPlantilla.Parrafo($"Hola <strong>{EmailPlantilla.Html(nombre)}</strong>,") +
+        EmailPlantilla.Parrafo("Recibimos una solicitud para restablecer la contraseña de tu cuenta. Haz clic en el botón para crear una nueva:") +
+        EmailPlantilla.Boton("Cambiar contraseña", link) +
+        EmailPlantilla.Nota($"El enlace vence en {ExpireMinutes} minutos y solo puede usarse una vez. Si no solicitaste este cambio, ignora este correo: tu contraseña seguirá siendo la misma."),
+        "Crea una nueva contraseña para tu cuenta de Adopta+");
 }

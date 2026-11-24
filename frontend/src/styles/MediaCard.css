@@ -1,6 +1,6 @@
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
     gap: 22px;
     margin-bottom: 20px;
 }
@@ -11,6 +11,7 @@
 }
 
 .media-card {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -29,18 +30,25 @@
 .media-card__media {
     position: relative;
     aspect-ratio: 4 / 3;
+    flex-shrink: 0;
+    overflow: hidden;
     background: #ebf7f5;
     display: grid;
     place-items: center;
 }
 
+/* La imagen se ajusta al contenedor (no al revés): así todas las tarjetas
+   tienen la misma altura de foto sin importar la proporción original. */
 .media-card__media img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
 .media-card__media--contain img {
+    box-sizing: border-box;
     object-fit: contain;
     padding: 16px;
     background: #fff;
@@ -79,6 +87,7 @@
     margin: 0;
     font-size: 0.82rem;
     color: #6b7f87;
+    overflow-wrap: anywhere;
 }
 
 .media-card__meta {

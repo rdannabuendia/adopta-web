@@ -39,8 +39,10 @@ export default function LoginForm() {
 
     setLoading(true);
     try {
-      await login({ email: values.email.trim(), password: values.password });
-      navigate("/inicio", { replace: true });
+      const data = await login({ email: values.email.trim(), password: values.password });
+      // Contraseña temporal → primero debe crear la suya
+      const destino = data.usuario?.debeCambiarPassword ? "/primer-cambio-password" : "/inicio";
+      navigate(destino, { replace: true });
     } catch (err) {
       setServerError(err.message);
     } finally {

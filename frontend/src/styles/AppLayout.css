@@ -1,4 +1,3 @@
-/* ===== Layout de la aplicación ===== */
 .app-shell {
   --app-teal: #6aa3a3;
   --app-teal-dark: #1f7f8f;
@@ -42,6 +41,12 @@
   text-decoration: none;
 }
 
+.topbar__logo {
+  display: block;
+  height: 34px;   /* el topbar mide 64px */
+  width: auto;
+}
+
 .topbar__brand svg {
   font-size: 1.4rem;
 }
@@ -64,8 +69,12 @@
 }
 
 /* Menú de usuario (Topbar) */
-.topbar__user {
+.topbar__title + .bell {
   margin-left: auto;
+}
+
+.topbar__user {
+  margin-left: 0;
 }
 
 .user-trigger {
@@ -133,8 +142,35 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 64px);
+  height: calc(100dvh - 64px);
   padding: 22px 14px 24px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Los <a> y <button> del menú miden igual: sin esto el <a> con width:100% + padding
+   se salía del sidebar y aparecía una barra de scroll horizontal. */
+.sidebar *,
+.sidebar *::before,
+.sidebar *::after {
+  box-sizing: border-box;
+}
+
+/* Zona del menú: ocupa el espacio libre y es la única que hace scroll */
+.sidebar__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0 -14px;
+  padding: 0 14px;
+  overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Pie del sidebar: el botón de cerrar sesión no se mueve */
+.sidebar__footer {
+  flex: 0 0 auto;
+  padding-top: 16px;
 }
 
 .side-label {
@@ -244,7 +280,7 @@
 
 /* Botón "Cerrar Sesión" (BaseButton) */
 .sidebar .side-logout {
-  margin-top: 120%;
+  margin-top: 0;
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--app-teal-dark);
@@ -337,6 +373,10 @@
 }
 
 /* ---------- Inicio ---------- */
+.quick-alert {
+  margin-bottom: 16px;
+}
+
 .quick-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -368,7 +408,7 @@
     bottom: 0;
     left: 0;
     z-index: 40;
-    width: 270px;
+    width: min(270px, 85vw);
     height: auto;
     background: #fff;
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
@@ -402,6 +442,14 @@
 
   .page-header h1 {
     font-size: 1.6rem;
+  }
+}
+
+/* Pantallas bajas: las huellas decorativas estorbarían al menú */
+@media (max-height: 640px) {
+  .app-shell__deco--l1,
+  .app-shell__deco--l2 {
+    display: none;
   }
 }
 
