@@ -491,7 +491,7 @@
 }
 
 /* ---------- Responsive ---------- */
-.landing @media (max-width: 900px) {
+@media (max-width: 900px) {
   .landing .pets__nav--prev {
     left: -6px;
   }

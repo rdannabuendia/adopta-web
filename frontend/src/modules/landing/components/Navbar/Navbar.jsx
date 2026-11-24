@@ -42,7 +42,11 @@ export default function Navbar() {
   return (
     <header className={`header ${scrolled ? "is-scrolled" : ""}`}>
       <div className="header__container">
-        <a href="#inicio" className="header__logo" onClick={cerrar}>
+        <a
+          href="#inicio"
+          className="footer__logo"
+          aria-label="Adopta+ — inicio"
+        >
           <img src={logo} alt="Adopta+" />
         </a>
 
