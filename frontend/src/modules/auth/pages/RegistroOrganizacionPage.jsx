@@ -62,7 +62,13 @@ export default function RegistroOrganizacionPage() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setValues((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+    const nextValue =
+      name === "telefono" ? value.replace(/\D/g, "") : value;
+
+    setValues((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : nextValue,
+    }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
     setServerError("");
   };
@@ -178,8 +184,9 @@ export default function RegistroOrganizacionPage() {
                   label="Teléfono"
                   name="telefono"
                   type="tel"
+                  inputMode="numeric"
                   required
-                  maxLength={20}
+                  maxLength={10}
                   autoComplete="tel"
                   value={values.telefono}
                   onChange={handleChange}
