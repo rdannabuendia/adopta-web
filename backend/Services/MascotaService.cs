@@ -212,7 +212,7 @@ public class MascotaService : IMascotaService
         };
     }
 
-    // ---------- Crear ----------
+    // ---------- Crear (Transacción atómica: Mascota + Fotos) ----------
     public async Task<int> CrearAsync(int idOrganizacion, MascotaRequestDto dto)
     {
         var datos = Validar(dto);
@@ -255,6 +255,7 @@ public class MascotaService : IMascotaService
         }
         catch
         {
+            await tx.RollbackAsync();
             foreach (var r in guardadas) BorrarFoto(r);
             throw;
         }
@@ -262,7 +263,7 @@ public class MascotaService : IMascotaService
         return m.IdMascota;
     }
 
-    // ---------- Actualizar ----------
+    // ---------- Actualizar (Transacción atómica: Datos Mascota + Fotos) ----------
     public async Task ActualizarAsync(int idMascota, int idOrganizacion, MascotaRequestDto dto)
     {
         var m = await _db.Mascotas.Include(x => x.FotosMascota)
@@ -284,15 +285,17 @@ public class MascotaService : IMascotaService
         var extensiones = new List<string>();
         foreach (var f in nuevas) extensiones.Add(await ValidarFotoAsync(f));
 
-        Aplicar(m, datos);
-
-        var principalActual = restantes.FirstOrDefault(f => f.EsPrincipal);
-        _db.FotosMascota.RemoveRange(quitar);
-
         var guardadas = new List<string>();
         var entidadesNuevas = new List<FotosMascotum>();
+
+        await using var tx = await _db.Database.BeginTransactionAsync();
         try
         {
+            Aplicar(m, datos);
+
+            var principalActual = restantes.FirstOrDefault(f => f.EsPrincipal);
+            _db.FotosMascota.RemoveRange(quitar);
+
             for (var k = 0; k < nuevas.Count; k++)
             {
                 var ruta = await GuardarFotoAsync(m.IdMascota, nuevas[k], extensiones[k]);
@@ -312,9 +315,11 @@ public class MascotaService : IMascotaService
             foreach (var f in restantes.Concat(entidadesNuevas)) f.EsPrincipal = f == principal;
 
             await _db.SaveChangesAsync();
+            await tx.CommitAsync();
         }
         catch
         {
+            await tx.RollbackAsync();
             foreach (var r in guardadas) BorrarFoto(r);
             throw;
         }

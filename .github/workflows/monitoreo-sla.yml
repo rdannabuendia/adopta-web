@@ -1,0 +1,37 @@
+name: Monitoreo Sintético SLA - Adopta+
+
+on:
+  schedule:
+    # Se ejecuta automáticamente cada 30 minutos (cron en UTC)
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Permite ejecutarlo manualmente con un botón en GitHub
+
+jobs:
+  e2e-sla-monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias y Chromium
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Ejecutar suite SLA (6 módulos)
+        working-directory: ./frontend
+        run: npx playwright test --project=chromium --workers=1
+
+      - name: Guardar logs generados como evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-sla-${{ github.run_number }}
+          path: frontend/tests/logs/*.log
+          retention-days: 30

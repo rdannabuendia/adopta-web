@@ -123,6 +123,47 @@ if (!string.IsNullOrWhiteSpace(mobileBaseUrl))
 app.UseCors("front");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Middleware de Auditoría HTTP para SLA (Fuente de Datos FD-1)
+var logLock = new SemaphoreSlim(1, 1);
+var logsDir = Path.Combine(app.Environment.ContentRootPath, "Logs");
+Directory.CreateDirectory(logsDir);
+
+app.Use(async (context, next) =>
+{
+    // Solo audita endpoints de la API (ignora Swagger y archivos estáticos)
+    if (!context.Request.Path.StartsWithSegments("/api"))
+    {
+        await next();
+        return;
+    }
+
+    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+    var requestId = Guid.NewGuid().ToString("N")[..8];
+
+    await next(); // Ejecuta el endpoint real
+
+    stopwatch.Stop();
+    var ahoraLocal = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(-6));
+    var fechaLocal = ahoraLocal.ToString("yyyy-MM-ddTHH:mm:ss.fff-06:00");
+    var cliente = context.Request.Headers["X-Client-Type"].FirstOrDefault() ?? "PWA";
+
+    var lineaLog = $"[{fechaLocal}] [ReqID={requestId}] [{cliente}] " +
+                   $"{context.Request.Method} {context.Request.Path} | " +
+                   $"HTTP={context.Response.StatusCode} | duration_ms={stopwatch.ElapsedMilliseconds}\n";
+
+    var logFile = Path.Combine(logsDir, $"api-access-{ahoraLocal:yyyy-MM-dd}.log");
+    await logLock.WaitAsync();
+    try
+    {
+        await File.AppendAllTextAsync(logFile, lineaLog);
+    }
+    finally
+    {
+        logLock.Release();
+    }
+});
+
 app.MapControllers();
 
 app.Run();
