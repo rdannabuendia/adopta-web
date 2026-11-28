@@ -22,15 +22,16 @@ const fechaLocal = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
   .toISOString()
   .slice(0, 10);
 
-const LOG_FILE = path.join(LOG_DIR, `${fechaLocal}.log`);
+const LOG_FILE = path.join(LOG_DIR, `sla-funcional-${fechaLocal}.log`);
 
-function registrarLog(nivel, modulo, flujo, duracionMs, estado, detalle = "") {
+function registrarLog(quien, modulo, que, duracionMs, estado, detalle = "") {
   const ahora = new Date();
   const offsetMin = ahora.getTimezoneOffset();
   const local = new Date(ahora.getTime() - offsetMin * 60000);
   const ts = local.toISOString().slice(0, -1) + "-06:00";
 
-  const linea = `[${ts}] [${nivel}] [${modulo}] ${flujo} | Tiempo=${duracionMs}ms | Estado=${estado}${detalle ? ` | ${detalle}` : ""}\n`;
+  const resultado = `${estado} | Tiempo=${duracionMs}ms${detalle ? ` | ${detalle}` : ""}`;
+  const linea = `Timestamp=${ts} | Quien=${quien} | Modulo=${modulo} | Que=${que} | Resultado=${resultado}\n`;
   fs.appendFileSync(LOG_FILE, linea, "utf8");
 }
 
@@ -49,24 +50,28 @@ async function iniciarSesion(page) {
   await expect(page).not.toHaveURL(/login/, { timeout: 25000 });
 }
 
-test.describe.serial("Adopta+ | Verificación Funcional de Módulos Principales", () => {
+test.describe.serial("Adopta+ | Trazabilidad Funcional Completa", () => {
 
-  test("1. Módulo de Autenticación: Inicio de sesión y persistencia de sesión", async ({ page }) => {
+  test("1. Log in: Inicio de sesión y persistencia de sesión", async ({ page }) => {
     const inicio = Date.now();
     await iniciarSesion(page);
 
-    // Verifica que la sesión persiste al recargar
     await page.reload();
     await expect(page).not.toHaveURL(/login/, { timeout: 15000 });
 
-    registrarLog("INFO", "MODULO-AUTH", "Login exitoso y persistencia de token JWT", Date.now() - inicio, "PASS");
+    registrarLog(
+      CREDENCIALES.organizacion.email,
+      "MODULO-AUTH",
+      "Log in y persistencia de sesión JWT",
+      Date.now() - inicio,
+      "PASS"
+    );
   });
 
-  test("2. Módulo de Catálogo de Mascotas: Consulta de inventario y ficha de detalle", async ({ page }) => {
+  test("2. Operativa (Catálogo): Consulta de inventario de mascotas", async ({ page }) => {
     const inicio = Date.now();
     await iniciarSesion(page);
 
-    // Prepara la escucha de la API antes de hacer clic en el menú
     const esperarMascotas = page.waitForResponse(
       (res) => res.url().includes("/api/") && res.url().toLowerCase().includes("mascota") && res.status() === 200,
       { timeout: 20000 }
@@ -76,36 +81,44 @@ test.describe.serial("Adopta+ | Verificación Funcional de Módulos Principales"
     const respuestaApi = await esperarMascotas;
 
     expect(respuestaApi.ok()).toBeTruthy();
-    registrarLog("INFO", "MODULO-MASCOTAS", "Carga funcional de catálogo de mascotas desde BD", Date.now() - inicio, "PASS", `HTTP=${respuestaApi.status()}`);
+    registrarLog(
+      CREDENCIALES.organizacion.email,
+      "MODULO-MASCOTAS",
+      "Operativa: Consulta funcional de catálogo de mascotas",
+      Date.now() - inicio,
+      "PASS",
+      `HTTP=${respuestaApi.status()}`
+    );
   });
 
-  test("3. Módulo de Solicitudes de Adopción: Consulta y apertura de expediente", async ({ page }) => {
+  test("3. Operativa (Solicitudes): Consulta de bandeja de adopción", async ({ page }) => {
     const inicio = Date.now();
     await iniciarSesion(page);
 
     await page.getByRole("link", { name: /solicitudes|adopciones/i }).first().click();
     await expect(page.locator("main")).toBeVisible({ timeout: 15000 });
 
-    registrarLog("INFO", "MODULO-ADOPCIONES", "Consulta funcional de bandeja de solicitudes de adopción", Date.now() - inicio, "PASS");
+    registrarLog(
+      CREDENCIALES.organizacion.email,
+      "MODULO-SOLICITUDES",
+      "Operativa: Consulta de bandeja de solicitudes de adopción",
+      Date.now() - inicio,
+      "PASS"
+    );
   });
 
-  test("4. Módulo de Solicitudes y Documentos: Revisión de expediente y documentos adjuntos", async ({ page }) => {
-    test.setTimeout(60000); // Permite hasta 60s para el flujo completo con carga de archivos
+  test("4. Operativa (Documentos): Revisión de expediente y documentos adjuntos", async ({ page }) => {
+    test.setTimeout(60000);
     const inicio = Date.now();
     await iniciarSesion(page);
 
-    // 1. Entrar a "Solicitudes de adopción"
     await page.getByRole("link", { name: /Solicitudes de adopción/i }).click();
-
-    // 2. Hacer clic en el primer enlace "Detalle"
     await page.getByRole("link", { name: /^Detalle$/i }).first().click();
 
-    // 3. Hacer clic en el botón "Ver Documentos"
     const btnVerDocs = page.getByRole("button", { name: /Ver Documentos/i });
     await expect(btnVerDocs).toBeVisible({ timeout: 15000 });
     await btnVerDocs.click();
 
-    // 4. Esperar a que carguen los archivos dentro del modal
     const modalDocs = page.getByRole("dialog", { name: /Documentos adjuntos/i });
     await expect(modalDocs).toBeVisible({ timeout: 15000 });
     await expect(modalDocs.getByText(/Cargando/i)).toBeHidden({ timeout: 20000 });
@@ -115,31 +128,36 @@ test.describe.serial("Adopta+ | Verificación Funcional de Módulos Principales"
 
     const totalArchivos = await botonesVerArchivo.count();
     expect(totalArchivos).toBeGreaterThan(0);
-    
+
     registrarLog(
-      "INFO",
+      CREDENCIALES.organizacion.email,
       "MODULO-DOCUMENTOS",
-      "Consulta de expediente y verificación de archivos adjuntos del adoptante",
+      "Operativa: Revisión de expediente y documentos adjuntos",
       Date.now() - inicio,
       "PASS",
-      `DocumentoVisible=true | ArchivosCargados=${totalArchivos}`
+      `ArchivosCargados=${totalArchivos}`
     );
   });
 
-  test("5. Módulo de Perfil y Cierre de Sesión: Consulta de datos y finalización segura", async ({ page }) => {
+  test("5. Log out: Cierre de sesión seguro", async ({ page }) => {
     const inicio = Date.now();
     await iniciarSesion(page);
 
     await page.getByText(/cerrar sesión/i).first().click();
     await expect(page).toHaveURL(/login|inicio/, { timeout: 15000 });
 
-    registrarLog("INFO", "MODULO-SESION", "Cierre de sesión limpio y revocación en cliente", Date.now() - inicio, "PASS");
+    registrarLog(
+      CREDENCIALES.organizacion.email,
+      "MODULO-AUTH",
+      "Log out (Cierre de sesión limpio)",
+      Date.now() - inicio,
+      "PASS"
+    );
   });
 
-  test("6. Sonda Sintética Global: Verificación directa de disponibilidad API y BD", async ({ request }) => {
+  test("6. Sonda Sintética Global: Verificación de disponibilidad API + MySQL", async ({ request }) => {
     const inicio = Date.now();
 
-    // Valida disponibilidad de API REST + consulta de credenciales en MySQL (SLI-01 / SLI-16)
     const respuesta = await request.post(
       "https://adopta-api-hagrcpb2ebhseyfy.eastus-01.azurewebsites.net/api/auth/login",
       {
@@ -153,12 +171,11 @@ test.describe.serial("Adopta+ | Verificación Funcional de Módulos Principales"
 
     expect(respuesta.status()).toBe(200);
 
-    // Evalúa contra el umbral SLT de SLI-16 (<= 2000 ms)
     const cumpleSlt = duracion <= 2000;
     registrarLog(
-      cumpleSlt ? "INFO" : "WARN",
+      "Sonda-Playwright",
       "SONDA-GLOBAL",
-      "Sonda sintética de disponibilidad API REST + MySQL",
+      "Verificación directa de disponibilidad API REST + MySQL",
       duracion,
       "PASS",
       `HTTP=${respuesta.status()} | CumpleSLT_2000ms=${cumpleSlt}`
